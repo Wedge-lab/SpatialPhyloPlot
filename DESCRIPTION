@@ -4,15 +4,29 @@ Title: What the Package Does (Title Case)
 Version: 0.1.0
 Authors@R: c(
     person(
-      "Jane", "Doe",
-      email = "jane@example.com",
+      "Maria", "Jakobsdottir",
+      email = "maria.jakobsdottir@manchester.ac.uk",
       role = c("aut", "cre")
     )
   )
-Description: More about what it does (maybe more than one line).
-    Continuation lines should be indented.
+Description: An R package to plot phylogenetic trees generated from 10X Visium spatial transcriptomics data in their spatial context. 
 License: What license is it under?
 Encoding: UTF-8
 LazyData: true
 URL: https://github.com/mjakobs/SpatialPlots
 BugReports: https://github.com/mjakobs/SpatialPlots/issues
+Depends:
+    Seurat (>= 4.0.0)
+Imports:
+    alakazam,
+    ape,
+    ggforce,
+    ggplot2,
+    igraph,
+    magick,
+    RColorBrewer
+Suggests: 
+    testthat,
+    SeuratData
+Config/testthat/edition: 3
+RoxygenNote: 7.3.2
