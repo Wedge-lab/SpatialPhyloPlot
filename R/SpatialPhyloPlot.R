@@ -8,7 +8,8 @@
 #' @param clone_df A `data.frame` listing which barcode belongs to which clone.
 #' @param clone_group_column The name of the column in `clone_df` that indicates the clones.
 #' @param clone_barcode_column The name of the column in `clone_df` that indicates the barcode.
-#' @param ... Please see `?img_plot` for further plot parameters.
+#'
+#' @inheritParams img_plot
 #'
 #' @import ggplot2
 #' @import ggforce
@@ -24,6 +25,18 @@ SpatialPhyloPlot <- function(visium_object,
                              clone_group_column,
                              clone_barcode_column = "Barcode",
                              palette = "default",
+                             plot_points = TRUE,
+                             plot_polygon = FALSE,
+                             point_alpha = 0.8,
+                             hull_alpha = 0,
+                             hull_expansion = 0.005,
+                             centroid_alpha = 0.9,
+                             centroid_size = 8,
+                             segment_alpha = 0.8,
+                             segment_width = 2,
+                             segment_colour = "grey",
+                             fig_offset_x = 0.011,
+                             fig_offset_y = 0.011,
                              ...) {
   ############# Check inputs
   if(all(!("Seurat" %in% class(visium_object)))){
@@ -77,7 +90,18 @@ SpatialPhyloPlot <- function(visium_object,
     newick_df = newick_tree_df,
     from_to_df = segments,
     palette = my_palette,
-    ...
+    plot_points = plot_points,
+    plot_polygon = plot_polygon,
+    point_alpha = point_alpha,
+    hull_alpha = hull_alpha,
+    hull_expansion = hull_expansion,
+    centroid_alpha = centroid_alpha,
+    centroid_size = centroid_size,
+    segment_alpha = segment_alpha,
+    segment_width = segment_width,
+    segment_colour = segment_colour,
+    fig_offset_x = fig_offset_x,
+    fig_offset_y = fig_offset_y
   )
 
   return(plot)
