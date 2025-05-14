@@ -9,6 +9,8 @@ img_plot(
   coordinates_df_scaled,
   newick_df,
   from_to_df,
+  plot_points = TRUE,
+  plot_polygon = FALSE,
   point_alpha = 0.8,
   hull_alpha = 0,
   hull_expansion = 0.005,
@@ -17,8 +19,8 @@ img_plot(
   segment_alpha = 0.8,
   segment_width = 2,
   segment_colour = "grey",
-  fig_offset_x = 0.025,
-  fig_offset_y = 0.025,
+  fig_offset_x = 0.011,
+  fig_offset_y = 0.011,
   palette
 )
 }

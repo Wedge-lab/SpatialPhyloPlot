@@ -12,6 +12,18 @@ SpatialPhyloPlot(
   clone_group_column,
   clone_barcode_column = "Barcode",
   palette = "default",
+  plot_points = TRUE,
+  plot_polygon = FALSE,
+  point_alpha = 0.8,
+  hull_alpha = 0,
+  hull_expansion = 0.005,
+  centroid_alpha = 0.9,
+  centroid_size = 8,
+  segment_alpha = 0.8,
+  segment_width = 2,
+  segment_colour = "grey",
+  fig_offset_x = 0.011,
+  fig_offset_y = 0.011,
   ...
 )
 }
@@ -28,7 +40,27 @@ SpatialPhyloPlot(
 
 \item{clone_barcode_column}{The name of the column in `clone_df` that indicates the barcode.}
 
-\item{...}{Please see `?img_plot` for further plot parameters.}
+\item{palette}{}
+
+\item{point_alpha}{The alpha transparency value for points, default is `0.8`.}
+
+\item{hull_alpha}{The alpha transparency value for polygons/hulls to be plotted, default is `0` (not plotted).}
+
+\item{hull_expansion}{The hull/polygon extension amount, default is `0.005`.}
+
+\item{centroid_alpha}{The alpha transparency value for the centroids plotted as part of the phylogenetic tree, default is `0.9`.}
+
+\item{centroid_size}{The size of the plotted centroid points, default is `8`.}
+
+\item{segment_alpha}{The alpha transparency value for phylogenetic tree segments, default is `0.8`.}
+
+\item{segment_width}{The width of the phylogenetic tree segments, default is `2`.}
+
+\item{segment_colour}{The colour of the phylogenetic tree segments, default is `"grey"`.}
+
+\item{fig_offset_x}{The offset to adjust the histology image x location, if required. Default is `0.025`, adjustments not recommended.}
+
+\item{fig_offset_y}{The offset to adjust the histology image y location, if required. Default is `0.025`, adjustments not recommended.}
 }
 \value{
 A ggplot2 object with the tissue, clones, and phylogenetic trees plotted together.
