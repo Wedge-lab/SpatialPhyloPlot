@@ -76,27 +76,27 @@ img_plot <- function(raster_img,
                      segment_alpha = 0.8,
                      segment_width = 2,
                      segment_colour = "grey",
-                     fig_offset_x = 0.025,
-                     fig_offset_y = 0.025,
+                     fig_offset_x = 0.011,
+                     fig_offset_y = 0.011,
                      palette
 ) {
 
   p <- ggplot()+
     annotation_raster(raster_img, xmin = 0,  xmax = 1+fig_offset_x,
-                      ymin = 0, ymax = 1+fig_offset_y)
+                      ymin = 0+fig_offset_y, ymax = 1)
 
   if(plot_points){
-    p +
+    p <- p +
       geom_point(data = coordinates_df_scaled, aes(x = new_x_scaled, y = new_y_scaled, colour = Clone),
                  alpha = point_alpha, show.legend = NA)
   }
   if(plot_polygon){
-    p +
+    p <- p +
       geom_mark_hull(data = coordinates_df_scaled, aes(x = new_x_scaled, y = new_y_scaled, fill = Clone),
                      alpha = hull_alpha, expand=hull_expansion, show.legend = NA)
   }
 
-  p +
+  p <- p +
     geom_segment(data = from_to_df, aes(x = from_x, y = from_y, xend = to_x, yend = to_y),
                  colour = segment_colour, linewidth = segment_width, alpha = segment_alpha)+
     geom_point(data = subset(newick_df, !is.na(colour)), aes(x = centroid_x, y = centroid_y, colour = colour),
