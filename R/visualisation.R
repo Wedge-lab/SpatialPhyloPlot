@@ -32,9 +32,9 @@ img_get_raster <- function(image_path) {
 #' @returns A named list with the colour palette associated with the list of clones.
 #'
 img_name_colours <- function(newick_df, palette_name = "Set2") {
-  nclones <- length(unique(newick_df$colour))
+  nclones <- length(unique(na.omit(newick_df$colour)))
   mypal <- RColorBrewer::brewer.pal(n = nclones, name = palette_name)
-  names(mypal) <- unique(newick_df$colour)
+  names(mypal) <- unique(na.omit(newick_df$colour))
 
   return(mypal)
 }
@@ -66,6 +66,8 @@ img_plot <- function(raster_img,
                      coordinates_df_scaled,
                      newick_df,
                      from_to_df,
+                     plot_points = TRUE,
+                     plot_polygon = FALSE,
                      point_alpha = 0.8,
                      hull_alpha = 0,
                      hull_expansion = 0.005,
@@ -77,15 +79,24 @@ img_plot <- function(raster_img,
                      fig_offset_x = 0.025,
                      fig_offset_y = 0.025,
                      palette
-                     ) {
+) {
 
   p <- ggplot()+
     annotation_raster(raster_img, xmin = 0,  xmax = 1+fig_offset_x,
-                      ymin = 0, ymax = 1+fig_offset_y)+
-    geom_point(data = coordinates_df_scaled, aes(x = new_x_scaled, y = new_y_scaled, colour = clone_bar),
-               alpha = point_alpha, show.legend = NA)+
-    geom_mark_hull(data = coordinates_df_scaled, aes(x = new_x_scaled, y = new_y_scaled, fill = Clone),
-                   alpha = hull_alpha, expand=hull_expansion, show.legend = NA)+
+                      ymin = 0, ymax = 1+fig_offset_y)
+
+  if(plot_points){
+    p +
+      geom_point(data = coordinates_df_scaled, aes(x = new_x_scaled, y = new_y_scaled, colour = Clone),
+                 alpha = point_alpha, show.legend = NA)
+  }
+  if(plot_polygon){
+    p +
+      geom_mark_hull(data = coordinates_df_scaled, aes(x = new_x_scaled, y = new_y_scaled, fill = Clone),
+                     alpha = hull_alpha, expand=hull_expansion, show.legend = NA)
+  }
+
+  p +
     geom_segment(data = from_to_df, aes(x = from_x, y = from_y, xend = to_x, yend = to_y),
                  colour = segment_colour, linewidth = segment_width, alpha = segment_alpha)+
     geom_point(data = subset(newick_df, !is.na(colour)), aes(x = centroid_x, y = centroid_y, colour = colour),
