@@ -6,6 +6,9 @@ An R package for plotting phylogenetic trees from Visium 10X spatial transcripto
 
 <img src="man/SpatialPhyloPlot.png" align="right" width="250" />
 
+- [SpatialPhyloPlot](#spatialphyloplot)
+  - [Installation](#installation)
+
 
 ## Installation
 
