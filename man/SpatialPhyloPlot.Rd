@@ -2,7 +2,7 @@
 % Please edit documentation in R/SpatialPhyloPlot.R
 \name{SpatialPhyloPlot}
 \alias{SpatialPhyloPlot}
-\title{Title}
+\title{Plot spatial phylogenetic trees}
 \usage{
 SpatialPhyloPlot(
   visium_object,
@@ -24,6 +24,22 @@ SpatialPhyloPlot(
   segment_colour = "grey",
   fig_offset_x = 0.011,
   fig_offset_y = 0.011,
+  multisample = FALSE,
+  plot_connections = FALSE,
+  visium_object_left = NA,
+  visium_object_right = NA,
+  visium_object_top = NA,
+  visium_object_bottom = NA,
+  image_file_left = NA,
+  image_file_right = NA,
+  image_file_top = NA,
+  image_file_bottom = NA,
+  clone_df_left = NA,
+  clone_df_right = NA,
+  clone_df_top = NA,
+  clone_df_bottom = NA,
+  connection_width = 1,
+  connection_colour = "grey",
   ...
 )
 }
@@ -40,7 +56,11 @@ SpatialPhyloPlot(
 
 \item{clone_barcode_column}{The name of the column in `clone_df` that indicates the barcode.}
 
-\item{palette}{}
+\item{palette}{A named list of colours for each clone. Defaults to `RColorBrewer` `Set2`.}
+
+\item{plot_points}{Whether individual Visium spots should be plotted. Defaults to `TRUE`.}
+
+\item{plot_polygon}{Whether a polygon should be plotted for each clone. Defaults to `FALSE`.}
 
 \item{point_alpha}{The alpha transparency value for points, default is `0.8`.}
 
@@ -58,13 +78,45 @@ SpatialPhyloPlot(
 
 \item{segment_colour}{The colour of the phylogenetic tree segments, default is `"grey"`.}
 
-\item{fig_offset_x}{The offset to adjust the histology image x location, if required. Default is `0.025`, adjustments not recommended.}
+\item{fig_offset_x}{The offset to adjust the histology image x_end location, if required. Default is `0.011`, adjustments not recommended.}
 
-\item{fig_offset_y}{The offset to adjust the histology image y location, if required. Default is `0.025`, adjustments not recommended.}
+\item{fig_offset_y}{The offset to adjust the histology image y location, if required. Default is `0.011` adjustments not recommended.}
+
+\item{multisample}{Whether multiple samples are being plotted with the same phylogenetic tree. Defaults to `FALSE`.}
+
+\item{plot_connections}{Whether connections should be plotted between clones that are present in multiple samples. Defaults to `FALSE`.}
+
+\item{visium_object_left}{If running in multisample mode; a `Seurat` Visium 10X object for the tissue to be plotted to the left of the main sample.}
+
+\item{visium_object_right}{If running in multisample mode; a `Seurat` Visium 10X object for the tissue to be plotted to the right of the main sample.}
+
+\item{visium_object_top}{If running in multisample mode; a `Seurat` Visium 10X object for the tissue to be plotted above the main sample.}
+
+\item{visium_object_bottom}{If running in multisample mode; a `Seurat` Visium 10X object for the tissue to be plotted below the main sample.}
+
+\item{image_file_left}{If running in multisample mode; a file path to the hires Visium 10X png image to plot to the left of the main sample.}
+
+\item{image_file_right}{If running in multisample mode; a file path to the hires Visium 10X png image to plot to the right of the main sample.}
+
+\item{image_file_top}{If running in multisample mode; a file path to the hires Visium 10X png image to plot above the main sample.}
+
+\item{image_file_bottom}{If running in multisample mode; a file path to the hires Visium 10X png image to plot below the main sample.}
+
+\item{clone_df_left}{If running in multisample mode; a  `data.frame` listing which barcode belongs to which clone belonging to the sample plotted to the left of the main sample.}
+
+\item{clone_df_right}{If running in multisample mode; a  `data.frame` listing which barcode belongs to which clone belonging to the sample plotted to the right of the main sample.}
+
+\item{clone_df_top}{If running in multisample mode; a  `data.frame` listing which barcode belongs to which clone belonging to the sample plotted above the main sample.}
+
+\item{clone_df_bottom}{If running in multisample mode; a  `data.frame` listing which barcode belongs to which clone belonging to the sample plotted below the main sample.}
+
+\item{connection_width}{The width of the connecting segment linking clones between samples. Defaults to `1`.}
+
+\item{connection_colour}{The colour of the connecting segment linking clones between samples. Defaults to `grey`.}
 }
 \value{
 A ggplot2 object with the tissue, clones, and phylogenetic trees plotted together.
 }
 \description{
-Title
+A function for plotting spatial phylogenetic trees on Visium 10X data.
 }
