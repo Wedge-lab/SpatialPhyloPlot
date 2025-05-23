@@ -4,12 +4,14 @@
 test_that("Runs if input is Seurat object, otherwise fails", {
   expect_error(SpatialPhyloPlot(demo_visium,
                                 newick_file_path,
-                                demo_clones))
+                                clone_barcodes,
+                                clone_barcode_column = "Barcodes1"))
 })
 test_that("Clone barcode input is data frame", {
   expect_error(SpatialPhyloPlot(demo_visium,
                newick_file_path,
-               as.matrix(demo_clones)))
+               as.matrix(clone_barcodes),
+               clone_barcode_column = "Barcodes1"))
 })
 test_that("Clone barcode input has >0 lines", {
 
@@ -66,4 +68,15 @@ test_that("Input tree file is .new", {
 # Calculate centroids
 
 # Create segments
+test_that("connect_multisample produces a data.frame with a single row and specific columns", {
+  expect_no_error(connect_multisample(test_multinewick))
 
+  output <- connect_multisample(test_multinewick)
+
+  expect_equal(nrow(output),1)
+  expect_equal(colnames(output),c("Clone","centre_x","centre_y",
+                                  "left_x","left_y",
+                                  "right_x","right_y",
+                                  "top_x","top_y",
+                                  "bottom_x","bottom_y"))
+})

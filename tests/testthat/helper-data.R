@@ -1,6 +1,8 @@
 ### Demo data
 # library(Seurat)
 # library(SeuratData)
+# remotes::install_github("rstudio/ggcheck")
+library(ggcheck) # for checking plot layers and geoms
 
 # withr::with_package("SeuratData", {demo_visium <- LoadData("stxBrain", type = "anterior1")})
 demo_visium <- SeuratData::LoadData("stxBrain", type = "anterior1")
@@ -51,3 +53,12 @@ names(test_palette) <- c("A","B","C","D")
 
 wrong_palette <- c("blue","grey","black","red")
 names(wrong_palette) <- c("A","B","C","J")
+
+# Multinewick file (partial columns)
+test_multinewick <- as.data.frame(matrix(nrow = 5, ncol = 4))
+colnames(test_multinewick) <- c("colour","Origin","centroid_x","centroid_y")
+test_multinewick$colour <- rep("Clone_X",5)
+test_multinewick$Origin <- c("Centre","Left","Right","Top","Bottom")
+test_multinewick$centroid_x <- rep(0,5)
+test_multinewick$centroid_y <- rep(0,5)
+

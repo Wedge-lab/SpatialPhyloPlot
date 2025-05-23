@@ -39,4 +39,171 @@ test_that("Error if clone name not in list. ",{
 
 # plot
 
+# test plot coordinates
+
+# test plot elements
+
+test_that("Correct layers produced if you provide the right input. ", {
+  output <- SpatialPhyloPlot(visium_object = demo_visium,
+                             newick_file = newick_file_path,
+                             image_file = image_file_path,
+                             clone_df = clone_barcodes,
+                             clone_group_column = "group",
+                             clone_barcode_column = "Barcodes1")
+  expect_equal(sum(get_geoms(output) == "rasterann"),1)
+  expect_equal(sum(get_geoms(output) == "point"),2)
+
+})
+
+test_that("Correct layers produced if you provide the right input in multisample. ", {
+  output <- SpatialPhyloPlot(visium_object = demo_visium,
+                             newick_file = newick_file_path,
+                             image_file = image_file_path,
+                             clone_df = clone_barcodes,
+                             clone_group_column = "group",
+                             clone_barcode_column = "Barcodes1",
+                             multisample = TRUE,
+                             visium_object_left = demo_visium,
+                             image_file_left = image_file_path,
+                             clone_df_left = clone_barcodes)
+
+  expect_equal(sum(get_geoms(output) == "rasterann"),2)
+  expect_equal(sum(get_geoms(output) == "point"),4)
+
+})
+
+test_that("Correct layers produced if you provide the right input in multisample with hull. ", {
+  output <- SpatialPhyloPlot(visium_object = demo_visium,
+                             newick_file = newick_file_path,
+                             image_file = image_file_path,
+                             clone_df = clone_barcodes,
+                             clone_group_column = "group",
+                             clone_barcode_column = "Barcodes1",
+                             multisample = TRUE,
+                             visium_object_left = demo_visium,
+                             image_file_left = image_file_path,
+                             clone_df_left = clone_barcodes,
+                             plot_polygon = TRUE)
+
+  expect_equal(sum(get_geoms(output) == "rasterann"),2)
+  expect_equal(sum(get_geoms(output) == "point"),4)
+  expect_equal(sum(get_geoms(output) == "markhull"),2)
+
+  output <- SpatialPhyloPlot(visium_object = demo_visium,
+                             newick_file = newick_file_path,
+                             image_file = image_file_path,
+                             clone_df = clone_barcodes,
+                             clone_group_column = "group",
+                             clone_barcode_column = "Barcodes1",
+                             multisample = TRUE,
+                             visium_object_right = demo_visium,
+                             image_file_right = image_file_path,
+                             clone_df_right = clone_barcodes,
+                             plot_polygon = TRUE)
+
+  expect_equal(sum(get_geoms(output) == "rasterann"),2)
+  expect_equal(sum(get_geoms(output) == "point"),4)
+  expect_equal(sum(get_geoms(output) == "markhull"),2)
+
+  output <- SpatialPhyloPlot(visium_object = demo_visium,
+                             newick_file = newick_file_path,
+                             image_file = image_file_path,
+                             clone_df = clone_barcodes,
+                             clone_group_column = "group",
+                             clone_barcode_column = "Barcodes1",
+                             multisample = TRUE,
+                             visium_object_top = demo_visium,
+                             image_file_top = image_file_path,
+                             clone_df_top = clone_barcodes,
+                             plot_polygon = TRUE)
+
+  expect_equal(sum(get_geoms(output) == "rasterann"),2)
+  expect_equal(sum(get_geoms(output) == "point"),4)
+  expect_equal(sum(get_geoms(output) == "markhull"),2)
+
+  output <- SpatialPhyloPlot(visium_object = demo_visium,
+                             newick_file = newick_file_path,
+                             image_file = image_file_path,
+                             clone_df = clone_barcodes,
+                             clone_group_column = "group",
+                             clone_barcode_column = "Barcodes1",
+                             multisample = TRUE,
+                             visium_object_bottom = demo_visium,
+                             image_file_bottom = image_file_path,
+                             clone_df_bottom = clone_barcodes,
+                             plot_polygon = TRUE)
+
+  expect_equal(sum(get_geoms(output) == "rasterann"),2)
+  expect_equal(sum(get_geoms(output) == "point"),4)
+  expect_equal(sum(get_geoms(output) == "markhull"),2)
+
+})
+test_that("Correct layers produced if you provide the right input in multisample with connections ", {
+  output <- SpatialPhyloPlot(visium_object = demo_visium,
+                             newick_file = newick_file_path,
+                             image_file = image_file_path,
+                             clone_df = clone_barcodes,
+                             clone_group_column = "group",
+                             clone_barcode_column = "Barcodes1",
+                             multisample = TRUE,
+                             visium_object_left = demo_visium,
+                             image_file_left = image_file_path,
+                             clone_df_left = clone_barcodes,
+                             plot_connections = TRUE)
+
+  expect_equal(sum(get_geoms(output) == "rasterann"),2)
+  expect_equal(sum(get_geoms(output) == "point"),4)
+  expect_equal(sum(get_geoms(output) == "segment"),3)
+
+  output <- SpatialPhyloPlot(visium_object = demo_visium,
+                             newick_file = newick_file_path,
+                             image_file = image_file_path,
+                             clone_df = clone_barcodes,
+                             clone_group_column = "group",
+                             clone_barcode_column = "Barcodes1",
+                             multisample = TRUE,
+                             visium_object_right = demo_visium,
+                             image_file_right = image_file_path,
+                             clone_df_right = clone_barcodes,
+                             plot_connections = TRUE)
+
+  expect_equal(sum(get_geoms(output) == "rasterann"),2)
+  expect_equal(sum(get_geoms(output) == "point"),4)
+  expect_equal(sum(get_geoms(output) == "segment"),3)
+
+  output <- SpatialPhyloPlot(visium_object = demo_visium,
+                             newick_file = newick_file_path,
+                             image_file = image_file_path,
+                             clone_df = clone_barcodes,
+                             clone_group_column = "group",
+                             clone_barcode_column = "Barcodes1",
+                             multisample = TRUE,
+                             visium_object_top = demo_visium,
+                             image_file_top = image_file_path,
+                             clone_df_top = clone_barcodes,
+                             plot_connections = TRUE)
+
+  expect_equal(sum(get_geoms(output) == "rasterann"),2)
+  expect_equal(sum(get_geoms(output) == "point"),4)
+  expect_equal(sum(get_geoms(output) == "segment"),3)
+
+  output <- SpatialPhyloPlot(visium_object = demo_visium,
+                             newick_file = newick_file_path,
+                             image_file = image_file_path,
+                             clone_df = clone_barcodes,
+                             clone_group_column = "group",
+                             clone_barcode_column = "Barcodes1",
+                             multisample = TRUE,
+                             visium_object_bottom = demo_visium,
+                             image_file_bottom = image_file_path,
+                             clone_df_bottom = clone_barcodes,
+                             plot_connections = TRUE)
+
+  expect_equal(sum(get_geoms(output) == "rasterann"),2)
+  expect_equal(sum(get_geoms(output) == "point"),4)
+  expect_equal(sum(get_geoms(output) == "segment"),3)
+
+})
+
+
 # gif version

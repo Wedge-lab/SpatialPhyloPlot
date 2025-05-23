@@ -1,30 +1,257 @@
 # Test inputs and ouptuts
+test_that("Everything runs if you provide the right input. ", {
+  expect_no_error(SpatialPhyloPlot(visium_object = demo_visium,
+                                newick_file = newick_file_path,
+                                image_file = image_file_path,
+                                clone_df = clone_barcodes,
+                                clone_group_column = "group",
+                                clone_barcode_column = "Barcodes1"))
+  expect_no_error(SpatialPhyloPlot(visium_object = demo_visium,
+                                   newick_file = newick_file_path,
+                                   image_file = image_file_path,
+                                   clone_df = clone_barcodes,
+                                   clone_group_column = "group",
+                                   clone_barcode_column = "Barcodes1",
+                                   plot_polygon = TRUE))
+})
 test_that("Error if visium object is not a seurat object. ",{
   expect_error(SpatialPhyloPlot(visium_object = demo_clones,
                                 newick_file = newick_file_path,
                                 image_file = image_file_path,
-                                clone_df = demo_clones,
+                                clone_df = clone_barcodes,
                                 clone_group_column = "group",
                                 clone_barcode_column = "Barcodes1"))
 })
 test_that("Error if clone group name not right or not supplied. ",{
-  expect_error(SpatialPhyloPlot(visium_object = demo_clones,
+  expect_error(SpatialPhyloPlot(visium_object = demo_visium,
                                 newick_file = newick_file_path,
                                 image_file = image_file_path,
-                                clone_df = demo_clones,
+                                clone_df = clone_barcodes,
                                 clone_group_column = "nonsense",
                                 clone_barcode_column = "Barcodes1"))
-  expect_error(SpatialPhyloPlot(visium_object = demo_clones,
+  expect_error(SpatialPhyloPlot(visium_object = demo_visium,
                                 newick_file = newick_file_path,
                                 image_file = image_file_path,
-                                clone_df = demo_clones,
+                                clone_df = clone_barcodes,
                                 clone_barcode_column = "Barcodes1"))
 })
 test_that("Error if clone_df is not a data.frame. ",{
-  expect_error(SpatialPhyloPlot(visium_object = demo_clones,
+  expect_error(SpatialPhyloPlot(visium_object = demo_visium,
                                 newick_file = newick_file_path,
                                 image_file = image_file_path,
-                                clone_df = as.matrix(demo_clones),
+                                clone_df = as.matrix(clone_barcodes),
                                 clone_group_column = "group",
                                 clone_barcode_column = "Barcodes1"))
+})
+###################################
+# Testing multisample functionality
+test_that("Error if you try to run multisample functionality without multiple samples. ",{
+  expect_error(SpatialPhyloPlot(visium_object = demo_visium,
+                                newick_file = newick_file_path,
+                                image_file = image_file_path,
+                                clone_df = clone_barcodes,
+                                clone_group_column = "group",
+                                clone_barcode_column = "Barcodes1",
+                                multisample = TRUE))
+})
+test_that("Error if you try to run multisample functionality without sufficient input data. ",{
+  # Just visium
+  expect_error(SpatialPhyloPlot(visium_object = demo_visium,
+                                newick_file = newick_file_path,
+                                image_file = image_file_path,
+                                clone_df = clone_barcodes,
+                                clone_group_column = "group",
+                                clone_barcode_column = "Barcodes1",
+                                multisample = TRUE,
+                                visium_object_left = demo_visium))
+  expect_error(SpatialPhyloPlot(visium_object = demo_visium,
+                                newick_file = newick_file_path,
+                                image_file = image_file_path,
+                                clone_df = clone_barcodes,
+                                clone_group_column = "group",
+                                clone_barcode_column = "Barcodes1",
+                                multisample = TRUE,
+                                visium_object_right = demo_visium))
+  expect_error(SpatialPhyloPlot(visium_object = demo_visium,
+                                newick_file = newick_file_path,
+                                image_file = image_file_path,
+                                clone_df = clone_barcodes,
+                                clone_group_column = "group",
+                                clone_barcode_column = "Barcodes1",
+                                multisample = TRUE,
+                                visium_object_top = demo_visium))
+  expect_error(SpatialPhyloPlot(visium_object = demo_visium,
+                                newick_file = newick_file_path,
+                                image_file = image_file_path,
+                                clone_df = clone_barcodes,
+                                clone_group_column = "group",
+                                clone_barcode_column = "Barcodes1",
+                                multisample = TRUE,
+                                visium_object_bottom = demo_visium))
+  # Just image
+  expect_error(SpatialPhyloPlot(visium_object = demo_visium,
+                                newick_file = newick_file_path,
+                                image_file = image_file_path,
+                                clone_df = clone_barcodes,
+                                clone_group_column = "group",
+                                clone_barcode_column = "Barcodes1",
+                                multisample = TRUE,
+                                image_file_left = image_file_path))
+  expect_error(SpatialPhyloPlot(visium_object = demo_visium,
+                                newick_file = newick_file_path,
+                                image_file = image_file_path,
+                                clone_df = clone_barcodes,
+                                clone_group_column = "group",
+                                clone_barcode_column = "Barcodes1",
+                                multisample = TRUE,
+                                image_file_right = image_file_path))
+  expect_error(SpatialPhyloPlot(visium_object = demo_visium,
+                                newick_file = newick_file_path,
+                                image_file = image_file_path,
+                                clone_df = clone_barcodes,
+                                clone_group_column = "group",
+                                clone_barcode_column = "Barcodes1",
+                                multisample = TRUE,
+                                image_file_top = image_file_path))
+  expect_error(SpatialPhyloPlot(visium_object = demo_visium,
+                                newick_file = newick_file_path,
+                                image_file = image_file_path,
+                                clone_df = clone_barcodes,
+                                clone_group_column = "group",
+                                clone_barcode_column = "Barcodes1",
+                                multisample = TRUE,
+                                image_file_bottom = image_file_path))
+  # Just clones
+  expect_error(SpatialPhyloPlot(visium_object = demo_visium,
+                                newick_file = newick_file_path,
+                                image_file = image_file_path,
+                                clone_df = clone_barcodes,
+                                clone_group_column = "group",
+                                clone_barcode_column = "Barcodes1",
+                                multisample = TRUE,
+                                clone_df_left = demo_clones))
+  expect_error(SpatialPhyloPlot(visium_object = demo_visium,
+                                newick_file = newick_file_path,
+                                image_file = image_file_path,
+                                clone_df = clone_barcodes,
+                                clone_group_column = "group",
+                                clone_barcode_column = "Barcodes1",
+                                multisample = TRUE,
+                                clone_df_right = demo_clones))
+  expect_error(SpatialPhyloPlot(visium_object = demo_visium,
+                                newick_file = newick_file_path,
+                                image_file = image_file_path,
+                                clone_df = clone_barcodes,
+                                clone_group_column = "group",
+                                clone_barcode_column = "Barcodes1",
+                                multisample = TRUE,
+                                clone_df_top = demo_clones))
+  expect_error(SpatialPhyloPlot(visium_object = demo_visium,
+                                newick_file = newick_file_path,
+                                image_file = image_file_path,
+                                clone_df = clone_barcodes,
+                                clone_group_column = "group",
+                                clone_barcode_column = "Barcodes1",
+                                multisample = TRUE,
+                                clone_df_bottom = demo_clones))
+  # just visium and image
+  expect_error(SpatialPhyloPlot(visium_object = demo_visium,
+                                newick_file = newick_file_path,
+                                image_file = image_file_path,
+                                clone_df = clone_barcodes,
+                                clone_group_column = "group",
+                                clone_barcode_column = "Barcodes1",
+                                multisample = TRUE,
+                                visium_object_left = demo_visium,
+                                image_file_left = image_file_path))
+  expect_error(SpatialPhyloPlot(visium_object = demo_visium,
+                                newick_file = newick_file_path,
+                                image_file = image_file_path,
+                                clone_df = clone_barcodes,
+                                clone_group_column = "group",
+                                clone_barcode_column = "Barcodes1",
+                                multisample = TRUE,
+                                visium_object_right = demo_visium,
+                                image_file_right = image_file_path))
+  expect_error(SpatialPhyloPlot(visium_object = demo_visium,
+                                newick_file = newick_file_path,
+                                image_file = image_file_path,
+                                clone_df = clone_barcodes,
+                                clone_group_column = "group",
+                                clone_barcode_column = "Barcodes1",
+                                multisample = TRUE,
+                                visium_object_top = demo_visium,
+                                image_file_top = image_file_path))
+  expect_error(SpatialPhyloPlot(visium_object = demo_visium,
+                                newick_file = newick_file_path,
+                                image_file = image_file_path,
+                                clone_df = clone_barcodes,
+                                clone_group_column = "group",
+                                clone_barcode_column = "Barcodes1",
+                                multisample = TRUE,
+                                visium_object_bottom = demo_visium,
+                                image_file_bottom = image_file_path))
+})
+test_that("No error in multisample mode if appropriate data provided", {
+  expect_no_error(SpatialPhyloPlot(visium_object = demo_visium,
+                                                newick_file = newick_file_path,
+                                                image_file = image_file_path,
+                                                clone_df = clone_barcodes,
+                                                clone_group_column = "group",
+                                                clone_barcode_column = "Barcodes1",
+                                                multisample = TRUE,
+                                                visium_object_left = demo_visium,
+                                                image_file_left = image_file_path,
+                                                clone_df_left = clone_barcodes))
+  expect_no_error(SpatialPhyloPlot(visium_object = demo_visium,
+                                                newick_file = newick_file_path,
+                                                image_file = image_file_path,
+                                                clone_df = clone_barcodes,
+                                                clone_group_column = "group",
+                                                clone_barcode_column = "Barcodes1",
+                                                multisample = TRUE,
+                                                visium_object_left = demo_visium,
+                                                image_file_left = image_file_path,
+                                                clone_df_left = clone_barcodes,
+                                                plot_connections = TRUE))
+  expect_no_error(SpatialPhyloPlot(visium_object = demo_visium,
+                                                newick_file = newick_file_path,
+                                                image_file = image_file_path,
+                                                clone_df = clone_barcodes,
+                                                clone_group_column = "group",
+                                                clone_barcode_column = "Barcodes1",
+                                                multisample = TRUE,
+                                                visium_object_right = demo_visium,
+                                                image_file_right = image_file_path,
+                                                clone_df_right = clone_barcodes))
+  expect_no_error(SpatialPhyloPlot(visium_object = demo_visium,
+                                                newick_file = newick_file_path,
+                                                image_file = image_file_path,
+                                                clone_df = clone_barcodes,
+                                                clone_group_column = "group",
+                                                clone_barcode_column = "Barcodes1",
+                                                multisample = TRUE,
+                                                visium_object_top = demo_visium,
+                                                image_file_top = image_file_path,
+                                                clone_df_top = clone_barcodes))
+  expect_no_error(SpatialPhyloPlot(visium_object = demo_visium,
+                                                newick_file = newick_file_path,
+                                                image_file = image_file_path,
+                                                clone_df = clone_barcodes,
+                                                clone_group_column = "group",
+                                                clone_barcode_column = "Barcodes1",
+                                                multisample = TRUE,
+                                                visium_object_bottom = demo_visium,
+                                                image_file_bottom = image_file_path,
+                                                clone_df_bottom = clone_barcodes))
+})
+test_that("Output is a plot", {
+  output <- SpatialPhyloPlot(visium_object = demo_visium,
+                             newick_file = newick_file_path,
+                             image_file = image_file_path,
+                             clone_df = clone_barcodes,
+                             clone_group_column = "group",
+                             clone_barcode_column = "Barcodes1")
+
+  expect_equal(class(output),class(ggplot(cars, aes(x = dist, y = speed))+geom_point()))
 })
