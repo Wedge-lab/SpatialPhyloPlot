@@ -6,9 +6,25 @@
 \usage{
 img_plot(
   raster_img,
+  raster_img_left,
+  raster_img_right,
+  raster_img_top,
+  raster_img_bottom,
   coordinates_df_scaled,
+  coordinates_df_scaled_left,
+  coordinates_df_scaled_right,
+  coordinates_df_scaled_top,
+  coordinates_df_scaled_bottom,
   newick_df,
+  newick_df_left,
+  newick_df_right,
+  newick_df_top,
+  newick_df_bottom,
   from_to_df,
+  from_to_df_left,
+  from_to_df_right,
+  from_to_df_top,
+  from_to_df_bottom,
   plot_points = TRUE,
   plot_polygon = FALSE,
   point_alpha = 0.8,
@@ -21,17 +37,58 @@ img_plot(
   segment_colour = "grey",
   fig_offset_x = 0.011,
   fig_offset_y = 0.011,
-  palette
+  palette,
+  multisample,
+  plot_connections,
+  connections_coords,
+  connection_width,
+  connection_colour
 )
 }
 \arguments{
 \item{raster_img}{The raster image object containing the tissue image to be plotted.}
 
+\item{raster_img_left}{The raster image object containing the tissue image to be plotted to the left of the main image.}
+
+\item{raster_img_right}{The raster image object containing the tissue image to be plotted to the right of the main image.}
+
+\item{raster_img_top}{The raster image object containing the tissue image to be plotted above the main image.}
+
+\item{raster_img_bottom}{The raster image object containing the tissue image to be plotted below the main image.}
+
 \item{coordinates_df_scaled}{A `data.frame` with the scaled (0-1) spot coordinates for each Visium barcode.}
 
-\item{newick_df}{The newick data.frame generated from the .new phylogenetic tree file.}
+\item{coordinates_df_scaled_left}{A `data.frame` with the scaled (0-1) spot coordinates for each Visium barcode to be plotted to the left of the main tissue.}
+
+\item{coordinates_df_scaled_right}{A `data.frame` with the scaled (0-1) spot coordinates for each Visium barcode to be plotted to the right of the main tissue.}
+
+\item{coordinates_df_scaled_top}{A `data.frame` with the scaled (0-1) spot coordinates for each Visium barcode to be plotted above the main tissue.}
+
+\item{coordinates_df_scaled_bottom}{A `data.frame` with the scaled (0-1) spot coordinates for each Visium barcode to be plotted below the main tissue.}
+
+\item{newick_df}{The newick `data.frame` generated from the .new phylogenetic tree file.}
+
+\item{newick_df_left}{The newick `data.frame` generated from the .new phylogenetic tree file with connections to plot to the left of the main tissue.}
+
+\item{newick_df_right}{The newick `data.frame` generated from the .new phylogenetic tree file with connections to plot to the right of the main tissue.}
+
+\item{newick_df_top}{The newick `data.frame` generated from the .new phylogenetic tree file with connections to plot above the main tissue.}
+
+\item{newick_df_bottom}{The newick `data.frame` generated from the .new phylogenetic tree file with connections to plot below the main tissue.}
 
 \item{from_to_df}{A `data.frame` containing the start and end coordinates of each branch on the phylogenetic tree.}
+
+\item{from_to_df_left}{A `data.frame` containing the start and end coordinates of each branch on the phylogenetic tree to be plotted to the left of the main tissue.}
+
+\item{from_to_df_right}{A `data.frame` containing the start and end coordinates of each branch on the phylogenetic tree to be plotted to the right of the main tissue.}
+
+\item{from_to_df_top}{A `data.frame` containing the start and end coordinates of each branch on the phylogenetic tree to be plotted above the main tissue.}
+
+\item{from_to_df_bottom}{A `data.frame` containing the start and end coordinates of each branch on the phylogenetic tree to be plotted below the main tissue.}
+
+\item{plot_points}{Whether individual Visium spots should be plotted. Defaults to `TRUE`.}
+
+\item{plot_polygon}{Whether a polygon should be plotted for each clone. Defaults to `FALSE`.}
 
 \item{point_alpha}{The alpha transparency value for points, default is `0.8`.}
 
@@ -49,11 +106,21 @@ img_plot(
 
 \item{segment_colour}{The colour of the phylogenetic tree segments, default is `"grey"`.}
 
-\item{fig_offset_x}{The offset to adjust the histology image x location, if required. Default is `0.025`, adjustments not recommended.}
+\item{fig_offset_x}{The offset to adjust the histology image x_end location, if required. Default is `0.011`, adjustments not recommended.}
 
-\item{fig_offset_y}{The offset to adjust the histology image y location, if required. Default is `0.025`, adjustments not recommended.}
+\item{fig_offset_y}{The offset to adjust the histology image y location, if required. Default is `0.011` adjustments not recommended.}
 
-\item{palette}{}
+\item{palette}{A named list of colours for each clone. Defaults to `RColorBrewer` `Set2`.}
+
+\item{multisample}{Whether multiple samples are being plotted with the same phylogenetic tree. Defaults to `FALSE`.}
+
+\item{plot_connections}{Whether connections should be plotted between clones that are present in multiple samples. Defaults to `FALSE`.}
+
+\item{connections_coords}{A `data.frame` of coordinates linking clones found in multiple samples.}
+
+\item{connection_width}{The width of the connecting segment linking clones between samples. Defaults to `1`.}
+
+\item{connection_colour}{The colour of the connecting segment linking clones between samples. Defaults to `grey`.}
 }
 \value{
 A ggplot2 object with clones, trees, and tissue image plotted together.

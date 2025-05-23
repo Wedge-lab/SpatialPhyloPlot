@@ -153,3 +153,58 @@ create_segments <- function(newick_df) {
   return(from_to)
 
 }
+
+#' Create connections between clones in multiple samples
+#'
+#' @param combined_newick_df A concatenated Newick `data.frame` with the coordinates of each clone for each sample.
+#'
+#' @returns A `data.frame` with the start and end coordinates from the main plot to the others.
+#'
+connect_multisample <- function(combined_newick_df) {
+
+  clones <- unique(na.omit(combined_newick_df$colour))
+
+  connections_coordinates <- as.data.frame(matrix(nrow = length(clones), ncol = 11))
+  colnames(connections_coordinates) <- c("Clone","centre_x","centre_y",
+                                         "left_x","left_y",
+                                         "right_x","right_y",
+                                         "top_x","top_y",
+                                         "bottom_x","bottom_y")
+  connections_coordinates$Clone <- clones
+
+  for(i in 1:nrow(connections_coordinates)){
+
+    clone_info <- subset(combined_newick_df, colour == connections_coordinates$Clone[i])
+
+    if(nrow(subset(clone_info, Origin == "Centre")) > 0){
+      connections_coordinates$centre_x[i] <- subset(clone_info, Origin == "Centre")$centroid_x
+      connections_coordinates$centre_y[i] <- subset(clone_info, Origin == "Centre")$centroid_y
+    }
+
+    if(nrow(subset(clone_info, Origin == "Left")) > 0){
+      connections_coordinates$left_x[i] <- subset(clone_info, Origin == "Left")$centroid_x
+      connections_coordinates$left_y[i] <- subset(clone_info, Origin == "Left")$centroid_y
+    }
+
+    if(nrow(subset(clone_info, Origin == "Right")) > 0){
+      connections_coordinates$right_x[i] <- subset(clone_info, Origin == "Right")$centroid_x
+      connections_coordinates$right_y[i] <- subset(clone_info, Origin == "Right")$centroid_y
+    }
+
+    if(nrow(subset(clone_info, Origin == "Top")) > 0){
+      connections_coordinates$top_x[i] <- subset(clone_info, Origin == "Top")$centroid_x
+      connections_coordinates$top_y[i] <- subset(clone_info, Origin == "Top")$centroid_y
+    }
+
+    if(nrow(subset(clone_info, Origin == "Bottom")) > 0){
+      connections_coordinates$bottom_x[i] <- subset(clone_info, Origin == "Bottom")$centroid_x
+      connections_coordinates$bottom_y[i] <- subset(clone_info, Origin == "Bottom")$centroid_y
+    }
+
+  }
+
+  connections_coordinates <- subset(connections_coordinates, !is.na(centre_x))
+
+  return(connections_coordinates)
+
+}
