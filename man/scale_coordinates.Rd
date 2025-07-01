@@ -4,12 +4,12 @@
 \alias{scale_coordinates}
 \title{Scale Coordinates}
 \usage{
-scale_coordinates(coordinates_df, visium)
+scale_coordinates(coordinates_df, tissue_positions)
 }
 \arguments{
 \item{coordinates_df}{A `data.frame` with rotated spot coordinates.}
 
-\item{visium}{A `Seurat` Visium 10X object.}
+\item{tissue_positions}{A `data.frame` with tissue positions for each spot.}
 }
 \value{
 A `data.frame` with Visium 10X coordinates scaled from 0-1.

@@ -4,7 +4,7 @@
 #'
 #' @param image_path File path to the underlying Visium 10X tissue image, which will be plotted.
 #'
-#' @returns An image raster object which is used to plot the tissue image.
+#' @returns An image magick object which is used to plot the tissue image.
 #'
 img_get_raster <- function(image_path) {
 
@@ -13,14 +13,33 @@ img_get_raster <- function(image_path) {
   }
 
   hires <- magick::image_read(image_path)
-  hires_raster <- as.raster(hires)
+  # hires_raster <- as.raster(hires)
 
-  return(hires_raster)
+  return(hires)
 }
 
+#' Crop raster image
+#'
+#' @param hires_scale High resolution scale factor extracted from Seurat object.
+#' @param tissue_positions A `data.frame` with the pixel coordinates of each spot.
+#' @param raster An image magick object that is plotted as the tissue.
+#'
+#' @returns A magick image object cropped to the appropriate bounding box.
 
+img_crop_raster <- function(raster, hires_scale, tissue_positions) {
 
-# offset
+  hires_info <- magick::image_info(raster)
+
+  from_left <- min(tissue_positions$pxl_col_in_fullres)*hires_scale
+  from_bottom <- (min(tissue_positions$pxl_row_in_fullres)*hires_scale)
+  width <- (max(tissue_positions$pxl_col_in_fullres)*hires_scale) - (min(tissue_positions$pxl_col_in_fullres)*hires_scale)
+  height <- (max(tissue_positions$pxl_row_in_fullres)*hires_scale) - (min(tissue_positions$pxl_row_in_fullres)*hires_scale)
+
+  hires_crop <- magick::image_crop(raster, geometry =paste0(width,"x",height,"+",from_left,"+",from_bottom))
+
+  return(hires_crop)
+
+}
 
 #' Name colours for plotting
 #'
@@ -115,8 +134,8 @@ img_plot <- function(raster_img,
                      segment_alpha = 0.8,
                      segment_width = 2,
                      segment_colour = "grey",
-                     fig_offset_x = 0.011,
-                     fig_offset_y = 0.011,
+                     fig_offset_x = 0,
+                     fig_offset_y = 0,
                      palette,
                      multisample,
                      plot_connections,

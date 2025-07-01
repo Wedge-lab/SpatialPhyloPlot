@@ -21,7 +21,7 @@ test_that("Clone barcode input has >0 lines", {
 # get coordinates
 # get full image coordinates
 test_that("All coordinates are in the range 0-1",{
-  out_coords <- scale_coordinates(clone_barcodes_rotate, demo_visium)
+  out_coords <- scale_coordinates(clone_barcodes_rotate, tissue_positions_data)
 
   expect_false(any(out_coords$xmin < 0))
   expect_false(any(out_coords$xmin > 1))
