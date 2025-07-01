@@ -1,18 +1,22 @@
 # Test inputs and ouptuts
 test_that("Everything runs if you provide the right input. ", {
   expect_no_error(SpatialPhyloPlot(visium_object = demo_visium,
-                                newick_file = newick_file_path,
-                                image_file = image_file_path,
-                                clone_df = clone_barcodes,
-                                clone_group_column = "group",
-                                clone_barcode_column = "Barcodes1"))
+                                   newick_file = newick_file_path,
+                                   image_file = image_file_path,
+                                   clone_df = clone_barcodes,
+                                   clone_group_column = "group",
+                                   clone_barcode_column = "Barcodes1",
+                                   visium_version = "V1",
+                                   tissue_positions_file = tissue_positions_path))
   expect_no_error(SpatialPhyloPlot(visium_object = demo_visium,
                                    newick_file = newick_file_path,
                                    image_file = image_file_path,
                                    clone_df = clone_barcodes,
                                    clone_group_column = "group",
                                    clone_barcode_column = "Barcodes1",
-                                   plot_polygon = TRUE))
+                                   plot_polygon = TRUE,
+                                   visium_version = "V1",
+                                   tissue_positions_file = tissue_positions_path))
 })
 test_that("Error if visium object is not a seurat object. ",{
   expect_error(SpatialPhyloPlot(visium_object = demo_clones,
@@ -20,7 +24,9 @@ test_that("Error if visium object is not a seurat object. ",{
                                 image_file = image_file_path,
                                 clone_df = clone_barcodes,
                                 clone_group_column = "group",
-                                clone_barcode_column = "Barcodes1"))
+                                clone_barcode_column = "Barcodes1",
+                                visium_version = "V1",
+                                tissue_positions_file = tissue_positions_path))
 })
 test_that("Error if clone group name not right or not supplied. ",{
   expect_error(SpatialPhyloPlot(visium_object = demo_visium,
@@ -28,12 +34,16 @@ test_that("Error if clone group name not right or not supplied. ",{
                                 image_file = image_file_path,
                                 clone_df = clone_barcodes,
                                 clone_group_column = "nonsense",
-                                clone_barcode_column = "Barcodes1"))
+                                clone_barcode_column = "Barcodes1",
+                                visium_version = "V1",
+                                tissue_positions_file = tissue_positions_path))
   expect_error(SpatialPhyloPlot(visium_object = demo_visium,
                                 newick_file = newick_file_path,
                                 image_file = image_file_path,
                                 clone_df = clone_barcodes,
-                                clone_barcode_column = "Barcodes1"))
+                                clone_barcode_column = "Barcodes1",
+                                visium_version = "V1",
+                                tissue_positions_file = tissue_positions_path))
 })
 test_that("Error if clone_df is not a data.frame. ",{
   expect_error(SpatialPhyloPlot(visium_object = demo_visium,
@@ -41,7 +51,9 @@ test_that("Error if clone_df is not a data.frame. ",{
                                 image_file = image_file_path,
                                 clone_df = as.matrix(clone_barcodes),
                                 clone_group_column = "group",
-                                clone_barcode_column = "Barcodes1"))
+                                clone_barcode_column = "Barcodes1",
+                                visium_version = "V1",
+                                tissue_positions_file = tissue_positions_path))
 })
 ###################################
 # Testing multisample functionality
@@ -52,7 +64,9 @@ test_that("Error if you try to run multisample functionality without multiple sa
                                 clone_df = clone_barcodes,
                                 clone_group_column = "group",
                                 clone_barcode_column = "Barcodes1",
-                                multisample = TRUE))
+                                multisample = TRUE,
+                                visium_version = "V1",
+                                tissue_positions_file = tissue_positions_path))
 })
 test_that("Error if you try to run multisample functionality without sufficient input data. ",{
   # Just visium
@@ -63,7 +77,9 @@ test_that("Error if you try to run multisample functionality without sufficient 
                                 clone_group_column = "group",
                                 clone_barcode_column = "Barcodes1",
                                 multisample = TRUE,
-                                visium_object_left = demo_visium))
+                                visium_object_left = demo_visium,
+                                visium_version = "V1",
+                                tissue_positions_file = tissue_positions_path))
   expect_error(SpatialPhyloPlot(visium_object = demo_visium,
                                 newick_file = newick_file_path,
                                 image_file = image_file_path,
@@ -71,7 +87,9 @@ test_that("Error if you try to run multisample functionality without sufficient 
                                 clone_group_column = "group",
                                 clone_barcode_column = "Barcodes1",
                                 multisample = TRUE,
-                                visium_object_right = demo_visium))
+                                visium_object_right = demo_visium,
+                                visium_version = "V1",
+                                tissue_positions_file = tissue_positions_path))
   expect_error(SpatialPhyloPlot(visium_object = demo_visium,
                                 newick_file = newick_file_path,
                                 image_file = image_file_path,
@@ -79,7 +97,9 @@ test_that("Error if you try to run multisample functionality without sufficient 
                                 clone_group_column = "group",
                                 clone_barcode_column = "Barcodes1",
                                 multisample = TRUE,
-                                visium_object_top = demo_visium))
+                                visium_object_top = demo_visium,
+                                visium_version = "V1",
+                                tissue_positions_file = tissue_positions_path))
   expect_error(SpatialPhyloPlot(visium_object = demo_visium,
                                 newick_file = newick_file_path,
                                 image_file = image_file_path,
@@ -87,7 +107,9 @@ test_that("Error if you try to run multisample functionality without sufficient 
                                 clone_group_column = "group",
                                 clone_barcode_column = "Barcodes1",
                                 multisample = TRUE,
-                                visium_object_bottom = demo_visium))
+                                visium_object_bottom = demo_visium,
+                                visium_version = "V1",
+                                tissue_positions_file = tissue_positions_path))
   # Just image
   expect_error(SpatialPhyloPlot(visium_object = demo_visium,
                                 newick_file = newick_file_path,
@@ -96,7 +118,9 @@ test_that("Error if you try to run multisample functionality without sufficient 
                                 clone_group_column = "group",
                                 clone_barcode_column = "Barcodes1",
                                 multisample = TRUE,
-                                image_file_left = image_file_path))
+                                image_file_left = image_file_path,
+                                visium_version = "V1",
+                                tissue_positions_file = tissue_positions_path))
   expect_error(SpatialPhyloPlot(visium_object = demo_visium,
                                 newick_file = newick_file_path,
                                 image_file = image_file_path,
@@ -104,7 +128,9 @@ test_that("Error if you try to run multisample functionality without sufficient 
                                 clone_group_column = "group",
                                 clone_barcode_column = "Barcodes1",
                                 multisample = TRUE,
-                                image_file_right = image_file_path))
+                                image_file_right = image_file_path,
+                                visium_version = "V1",
+                                tissue_positions_file = tissue_positions_path))
   expect_error(SpatialPhyloPlot(visium_object = demo_visium,
                                 newick_file = newick_file_path,
                                 image_file = image_file_path,
@@ -112,7 +138,9 @@ test_that("Error if you try to run multisample functionality without sufficient 
                                 clone_group_column = "group",
                                 clone_barcode_column = "Barcodes1",
                                 multisample = TRUE,
-                                image_file_top = image_file_path))
+                                image_file_top = image_file_path,
+                                visium_version = "V1",
+                                tissue_positions_file = tissue_positions_path))
   expect_error(SpatialPhyloPlot(visium_object = demo_visium,
                                 newick_file = newick_file_path,
                                 image_file = image_file_path,
@@ -120,7 +148,9 @@ test_that("Error if you try to run multisample functionality without sufficient 
                                 clone_group_column = "group",
                                 clone_barcode_column = "Barcodes1",
                                 multisample = TRUE,
-                                image_file_bottom = image_file_path))
+                                image_file_bottom = image_file_path,
+                                visium_version = "V1",
+                                tissue_positions_file = tissue_positions_path))
   # Just clones
   expect_error(SpatialPhyloPlot(visium_object = demo_visium,
                                 newick_file = newick_file_path,
@@ -129,7 +159,9 @@ test_that("Error if you try to run multisample functionality without sufficient 
                                 clone_group_column = "group",
                                 clone_barcode_column = "Barcodes1",
                                 multisample = TRUE,
-                                clone_df_left = demo_clones))
+                                clone_df_left = demo_clones,
+                                visium_version = "V1",
+                                tissue_positions_file = tissue_positions_path))
   expect_error(SpatialPhyloPlot(visium_object = demo_visium,
                                 newick_file = newick_file_path,
                                 image_file = image_file_path,
@@ -137,7 +169,9 @@ test_that("Error if you try to run multisample functionality without sufficient 
                                 clone_group_column = "group",
                                 clone_barcode_column = "Barcodes1",
                                 multisample = TRUE,
-                                clone_df_right = demo_clones))
+                                clone_df_right = demo_clones,
+                                visium_version = "V1",
+                                tissue_positions_file = tissue_positions_path))
   expect_error(SpatialPhyloPlot(visium_object = demo_visium,
                                 newick_file = newick_file_path,
                                 image_file = image_file_path,
@@ -145,7 +179,9 @@ test_that("Error if you try to run multisample functionality without sufficient 
                                 clone_group_column = "group",
                                 clone_barcode_column = "Barcodes1",
                                 multisample = TRUE,
-                                clone_df_top = demo_clones))
+                                clone_df_top = demo_clones,
+                                visium_version = "V1",
+                                tissue_positions_file = tissue_positions_path))
   expect_error(SpatialPhyloPlot(visium_object = demo_visium,
                                 newick_file = newick_file_path,
                                 image_file = image_file_path,
@@ -153,7 +189,9 @@ test_that("Error if you try to run multisample functionality without sufficient 
                                 clone_group_column = "group",
                                 clone_barcode_column = "Barcodes1",
                                 multisample = TRUE,
-                                clone_df_bottom = demo_clones))
+                                clone_df_bottom = demo_clones,
+                                visium_version = "V1",
+                                tissue_positions_file = tissue_positions_path))
   # just visium and image
   expect_error(SpatialPhyloPlot(visium_object = demo_visium,
                                 newick_file = newick_file_path,
@@ -163,7 +201,9 @@ test_that("Error if you try to run multisample functionality without sufficient 
                                 clone_barcode_column = "Barcodes1",
                                 multisample = TRUE,
                                 visium_object_left = demo_visium,
-                                image_file_left = image_file_path))
+                                image_file_left = image_file_path,
+                                visium_version = "V1",
+                                tissue_positions_file = tissue_positions_path))
   expect_error(SpatialPhyloPlot(visium_object = demo_visium,
                                 newick_file = newick_file_path,
                                 image_file = image_file_path,
@@ -172,7 +212,9 @@ test_that("Error if you try to run multisample functionality without sufficient 
                                 clone_barcode_column = "Barcodes1",
                                 multisample = TRUE,
                                 visium_object_right = demo_visium,
-                                image_file_right = image_file_path))
+                                image_file_right = image_file_path,
+                                visium_version = "V1",
+                                tissue_positions_file = tissue_positions_path))
   expect_error(SpatialPhyloPlot(visium_object = demo_visium,
                                 newick_file = newick_file_path,
                                 image_file = image_file_path,
@@ -181,7 +223,9 @@ test_that("Error if you try to run multisample functionality without sufficient 
                                 clone_barcode_column = "Barcodes1",
                                 multisample = TRUE,
                                 visium_object_top = demo_visium,
-                                image_file_top = image_file_path))
+                                image_file_top = image_file_path,
+                                visium_version = "V1",
+                                tissue_positions_file = tissue_positions_path))
   expect_error(SpatialPhyloPlot(visium_object = demo_visium,
                                 newick_file = newick_file_path,
                                 image_file = image_file_path,
@@ -190,60 +234,77 @@ test_that("Error if you try to run multisample functionality without sufficient 
                                 clone_barcode_column = "Barcodes1",
                                 multisample = TRUE,
                                 visium_object_bottom = demo_visium,
-                                image_file_bottom = image_file_path))
+                                image_file_bottom = image_file_path,
+                                visium_version = "V1",
+                                tissue_positions_file = tissue_positions_path))
 })
 test_that("No error in multisample mode if appropriate data provided", {
   expect_no_error(SpatialPhyloPlot(visium_object = demo_visium,
-                                                newick_file = newick_file_path,
-                                                image_file = image_file_path,
-                                                clone_df = clone_barcodes,
-                                                clone_group_column = "group",
-                                                clone_barcode_column = "Barcodes1",
-                                                multisample = TRUE,
-                                                visium_object_left = demo_visium,
-                                                image_file_left = image_file_path,
-                                                clone_df_left = clone_barcodes))
+                                   newick_file = newick_file_path,
+                                   image_file = image_file_path,
+                                   clone_df = clone_barcodes,
+                                   clone_group_column = "group",
+                                   clone_barcode_column = "Barcodes1",
+                                   multisample = TRUE,
+                                   visium_object_left = demo_visium,
+                                   image_file_left = image_file_path,
+                                   clone_df_left = clone_barcodes,
+                                   tissue_positions_file_left = tissue_positions_path,
+                                   visium_version = "V1",
+                                   tissue_positions_file = tissue_positions_path))
   expect_no_error(SpatialPhyloPlot(visium_object = demo_visium,
-                                                newick_file = newick_file_path,
-                                                image_file = image_file_path,
-                                                clone_df = clone_barcodes,
-                                                clone_group_column = "group",
-                                                clone_barcode_column = "Barcodes1",
-                                                multisample = TRUE,
-                                                visium_object_left = demo_visium,
-                                                image_file_left = image_file_path,
-                                                clone_df_left = clone_barcodes,
-                                                plot_connections = TRUE))
+                                   newick_file = newick_file_path,
+                                   image_file = image_file_path,
+                                   clone_df = clone_barcodes,
+                                   clone_group_column = "group",
+                                   clone_barcode_column = "Barcodes1",
+                                   multisample = TRUE,
+                                   visium_object_left = demo_visium,
+                                   image_file_left = image_file_path,
+                                   clone_df_left = clone_barcodes,
+                                   tissue_positions_file_left = tissue_positions_path,
+                                   plot_connections = TRUE,
+                                   visium_version = "V1",
+                                   tissue_positions_file = tissue_positions_path))
   expect_no_error(SpatialPhyloPlot(visium_object = demo_visium,
-                                                newick_file = newick_file_path,
-                                                image_file = image_file_path,
-                                                clone_df = clone_barcodes,
-                                                clone_group_column = "group",
-                                                clone_barcode_column = "Barcodes1",
-                                                multisample = TRUE,
-                                                visium_object_right = demo_visium,
-                                                image_file_right = image_file_path,
-                                                clone_df_right = clone_barcodes))
+                                   newick_file = newick_file_path,
+                                   image_file = image_file_path,
+                                   clone_df = clone_barcodes,
+                                   clone_group_column = "group",
+                                   clone_barcode_column = "Barcodes1",
+                                   multisample = TRUE,
+                                   visium_object_right = demo_visium,
+                                   image_file_right = image_file_path,
+                                   clone_df_right = clone_barcodes,
+                                   tissue_positions_file_right = tissue_positions_path,
+                                   visium_version = "V1",
+                                   tissue_positions_file = tissue_positions_path))
   expect_no_error(SpatialPhyloPlot(visium_object = demo_visium,
-                                                newick_file = newick_file_path,
-                                                image_file = image_file_path,
-                                                clone_df = clone_barcodes,
-                                                clone_group_column = "group",
-                                                clone_barcode_column = "Barcodes1",
-                                                multisample = TRUE,
-                                                visium_object_top = demo_visium,
-                                                image_file_top = image_file_path,
-                                                clone_df_top = clone_barcodes))
+                                   newick_file = newick_file_path,
+                                   image_file = image_file_path,
+                                   clone_df = clone_barcodes,
+                                   clone_group_column = "group",
+                                   clone_barcode_column = "Barcodes1",
+                                   multisample = TRUE,
+                                   visium_object_top = demo_visium,
+                                   image_file_top = image_file_path,
+                                   clone_df_top = clone_barcodes,
+                                   tissue_positions_file_top = tissue_positions_path,
+                                   visium_version = "V1",
+                                   tissue_positions_file = tissue_positions_path))
   expect_no_error(SpatialPhyloPlot(visium_object = demo_visium,
-                                                newick_file = newick_file_path,
-                                                image_file = image_file_path,
-                                                clone_df = clone_barcodes,
-                                                clone_group_column = "group",
-                                                clone_barcode_column = "Barcodes1",
-                                                multisample = TRUE,
-                                                visium_object_bottom = demo_visium,
-                                                image_file_bottom = image_file_path,
-                                                clone_df_bottom = clone_barcodes))
+                                   newick_file = newick_file_path,
+                                   image_file = image_file_path,
+                                   clone_df = clone_barcodes,
+                                   clone_group_column = "group",
+                                   clone_barcode_column = "Barcodes1",
+                                   multisample = TRUE,
+                                   visium_object_bottom = demo_visium,
+                                   image_file_bottom = image_file_path,
+                                   clone_df_bottom = clone_barcodes,
+                                   tissue_positions_file_bottom = tissue_positions_path,
+                                   visium_version = "V1",
+                                   tissue_positions_file = tissue_positions_path))
 })
 test_that("Output is a plot", {
   output <- SpatialPhyloPlot(visium_object = demo_visium,
@@ -251,7 +312,9 @@ test_that("Output is a plot", {
                              image_file = image_file_path,
                              clone_df = clone_barcodes,
                              clone_group_column = "group",
-                             clone_barcode_column = "Barcodes1")
+                             clone_barcode_column = "Barcodes1",
+                             visium_version = "V1",
+                             tissue_positions_file = tissue_positions_path)
 
   expect_equal(class(output),class(ggplot(cars, aes(x = dist, y = speed))+geom_point()))
 })

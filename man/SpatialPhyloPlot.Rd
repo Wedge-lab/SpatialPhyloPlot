@@ -6,8 +6,10 @@
 \usage{
 SpatialPhyloPlot(
   visium_object,
+  visium_version,
   newick_file,
   image_file,
+  tissue_positions_file,
   clone_df,
   clone_group_column,
   clone_barcode_column = "Barcode",
@@ -22,8 +24,8 @@ SpatialPhyloPlot(
   segment_alpha = 0.8,
   segment_width = 2,
   segment_colour = "grey",
-  fig_offset_x = 0.011,
-  fig_offset_y = 0.011,
+  fig_offset_x = 0,
+  fig_offset_y = 0,
   multisample = FALSE,
   plot_connections = FALSE,
   visium_object_left = NA,
@@ -38,6 +40,10 @@ SpatialPhyloPlot(
   clone_df_right = NA,
   clone_df_top = NA,
   clone_df_bottom = NA,
+  tissue_positions_file_left = NA,
+  tissue_positions_file_right = NA,
+  tissue_positions_file_top = NA,
+  tissue_positions_file_bottom = NA,
   connection_width = 1,
   connection_colour = "grey",
   ...
@@ -46,9 +52,13 @@ SpatialPhyloPlot(
 \arguments{
 \item{visium_object}{A `Seurat` Visium 10X object for the tumour sample of interest.}
 
+\item{visium_version}{Which version of Visium was used. Should be either `"V1"` or `"V2"`}
+
 \item{newick_file}{A file path to the phylogenetic tree in the Newick format saved as a `.new` file.}
 
 \item{image_file}{A file path to the hires Visium 10X png image to plot.}
+
+\item{tissue_positions_file}{A file path to the Visium 10X `tissue_positions_list.csv` file for V1 or `tissue_positions.csv` file for V2.}
 
 \item{clone_df}{A `data.frame` listing which barcode belongs to which clone.}
 
@@ -109,6 +119,14 @@ SpatialPhyloPlot(
 \item{clone_df_top}{If running in multisample mode; a  `data.frame` listing which barcode belongs to which clone belonging to the sample plotted above the main sample.}
 
 \item{clone_df_bottom}{If running in multisample mode; a  `data.frame` listing which barcode belongs to which clone belonging to the sample plotted below the main sample.}
+
+\item{tissue_positions_file_left}{If running in multisample mode; a path to the Visium 10X `tissue_positions_list.csv` file for V1 or `tissue_positions.csv` file for V2, belonging to the sample plotted to the left of the main sample.}
+
+\item{tissue_positions_file_right}{If running in multisample mode; a path to the Visium 10X `tissue_positions_list.csv` file for V1 or `tissue_positions.csv` file for V2, belonging to the sample plotted to the right of the main sample.}
+
+\item{tissue_positions_file_top}{If running in multisample mode; a path to the Visium 10X `tissue_positions_list.csv` file for V1 or `tissue_positions.csv` file for V2, belonging to the sample plotted above the main sample.}
+
+\item{tissue_positions_file_bottom}{If running in multisample mode; a path to the Visium 10X `tissue_positions_list.csv` file for V1 or `tissue_positions.csv` file for V2, belonging to the sample plotted below the main sample.}
 
 \item{connection_width}{The width of the connecting segment linking clones between samples. Defaults to `1`.}
 

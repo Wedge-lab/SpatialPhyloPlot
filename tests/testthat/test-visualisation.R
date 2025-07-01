@@ -16,7 +16,10 @@ test_that("Default palette works if no option supplied.",{
                                    image_file = image_file_path,
                                    clone_df = demo_clones,
                                    clone_group_column = "group",
-                                   clone_barcode_column = "Barcodes2"))
+                                   clone_barcode_column = "Barcodes2",
+                                   visium_version = "V1",
+                                   tissue_positions_file = tissue_positions_path
+                                   ))
 })
 test_that("Custom palette works if supplied as named list.",{
   expect_no_error(SpatialPhyloPlot(visium_object = demo_visium,
@@ -25,7 +28,9 @@ test_that("Custom palette works if supplied as named list.",{
                                    clone_df = demo_clones,
                                    palette = test_palette,
                                    clone_group_column = "group",
-                                   clone_barcode_column = "Barcodes2"))
+                                   clone_barcode_column = "Barcodes2",
+                                   visium_version = "V1",
+                                   tissue_positions_file = tissue_positions_path))
 })
 test_that("Error if clone name not in list. ",{
   expect_error(SpatialPhyloPlot(visium_object = demo_visium,
@@ -34,7 +39,9 @@ test_that("Error if clone name not in list. ",{
                                 clone_df = demo_clones,
                                 palette = wrong_palette,
                                 clone_group_column = "group",
-                                clone_barcode_column = "Barcodes1"))
+                                clone_barcode_column = "Barcodes1",
+                                visium_version = "V1",
+                                tissue_positions_file = tissue_positions_path))
 })
 
 # plot
@@ -49,7 +56,9 @@ test_that("Correct layers produced if you provide the right input. ", {
                              image_file = image_file_path,
                              clone_df = clone_barcodes,
                              clone_group_column = "group",
-                             clone_barcode_column = "Barcodes1")
+                             clone_barcode_column = "Barcodes1",
+                             visium_version = "V1",
+                             tissue_positions_file = tissue_positions_path)
   expect_equal(sum(get_geoms(output) == "rasterann"),1)
   expect_equal(sum(get_geoms(output) == "point"),2)
 
@@ -65,7 +74,10 @@ test_that("Correct layers produced if you provide the right input in multisample
                              multisample = TRUE,
                              visium_object_left = demo_visium,
                              image_file_left = image_file_path,
-                             clone_df_left = clone_barcodes)
+                             clone_df_left = clone_barcodes,
+                             visium_version = "V1",
+                             tissue_positions_file = tissue_positions_path,
+                             tissue_positions_file_left = tissue_positions_path)
 
   expect_equal(sum(get_geoms(output) == "rasterann"),2)
   expect_equal(sum(get_geoms(output) == "point"),4)
@@ -83,7 +95,10 @@ test_that("Correct layers produced if you provide the right input in multisample
                              visium_object_left = demo_visium,
                              image_file_left = image_file_path,
                              clone_df_left = clone_barcodes,
-                             plot_polygon = TRUE)
+                             plot_polygon = TRUE,
+                             visium_version = "V1",
+                             tissue_positions_file = tissue_positions_path,
+                             tissue_positions_file_left = tissue_positions_path)
 
   expect_equal(sum(get_geoms(output) == "rasterann"),2)
   expect_equal(sum(get_geoms(output) == "point"),4)
@@ -99,7 +114,10 @@ test_that("Correct layers produced if you provide the right input in multisample
                              visium_object_right = demo_visium,
                              image_file_right = image_file_path,
                              clone_df_right = clone_barcodes,
-                             plot_polygon = TRUE)
+                             plot_polygon = TRUE,
+                             visium_version = "V1",
+                             tissue_positions_file = tissue_positions_path,
+                             tissue_positions_file_right = tissue_positions_path)
 
   expect_equal(sum(get_geoms(output) == "rasterann"),2)
   expect_equal(sum(get_geoms(output) == "point"),4)
@@ -115,7 +133,10 @@ test_that("Correct layers produced if you provide the right input in multisample
                              visium_object_top = demo_visium,
                              image_file_top = image_file_path,
                              clone_df_top = clone_barcodes,
-                             plot_polygon = TRUE)
+                             plot_polygon = TRUE,
+                             visium_version = "V1",
+                             tissue_positions_file = tissue_positions_path,
+                             tissue_positions_file_top = tissue_positions_path)
 
   expect_equal(sum(get_geoms(output) == "rasterann"),2)
   expect_equal(sum(get_geoms(output) == "point"),4)
@@ -131,7 +152,10 @@ test_that("Correct layers produced if you provide the right input in multisample
                              visium_object_bottom = demo_visium,
                              image_file_bottom = image_file_path,
                              clone_df_bottom = clone_barcodes,
-                             plot_polygon = TRUE)
+                             plot_polygon = TRUE,
+                             visium_version = "V1",
+                             tissue_positions_file = tissue_positions_path,
+                             tissue_positions_file_bottom = tissue_positions_path)
 
   expect_equal(sum(get_geoms(output) == "rasterann"),2)
   expect_equal(sum(get_geoms(output) == "point"),4)
@@ -149,7 +173,10 @@ test_that("Correct layers produced if you provide the right input in multisample
                              visium_object_left = demo_visium,
                              image_file_left = image_file_path,
                              clone_df_left = clone_barcodes,
-                             plot_connections = TRUE)
+                             plot_connections = TRUE,
+                             visium_version = "V1",
+                             tissue_positions_file = tissue_positions_path,
+                             tissue_positions_file_left = tissue_positions_path)
 
   expect_equal(sum(get_geoms(output) == "rasterann"),2)
   expect_equal(sum(get_geoms(output) == "point"),4)
@@ -165,7 +192,10 @@ test_that("Correct layers produced if you provide the right input in multisample
                              visium_object_right = demo_visium,
                              image_file_right = image_file_path,
                              clone_df_right = clone_barcodes,
-                             plot_connections = TRUE)
+                             plot_connections = TRUE,
+                             visium_version = "V1",
+                             tissue_positions_file = tissue_positions_path,
+                             tissue_positions_file_right = tissue_positions_path)
 
   expect_equal(sum(get_geoms(output) == "rasterann"),2)
   expect_equal(sum(get_geoms(output) == "point"),4)
@@ -181,7 +211,10 @@ test_that("Correct layers produced if you provide the right input in multisample
                              visium_object_top = demo_visium,
                              image_file_top = image_file_path,
                              clone_df_top = clone_barcodes,
-                             plot_connections = TRUE)
+                             plot_connections = TRUE,
+                             visium_version = "V1",
+                             tissue_positions_file = tissue_positions_path,
+                             tissue_positions_file_top = tissue_positions_path)
 
   expect_equal(sum(get_geoms(output) == "rasterann"),2)
   expect_equal(sum(get_geoms(output) == "point"),4)
@@ -197,7 +230,10 @@ test_that("Correct layers produced if you provide the right input in multisample
                              visium_object_bottom = demo_visium,
                              image_file_bottom = image_file_path,
                              clone_df_bottom = clone_barcodes,
-                             plot_connections = TRUE)
+                             plot_connections = TRUE,
+                             visium_version = "V1",
+                             tissue_positions_file = tissue_positions_path,
+                             tissue_positions_file_bottom = tissue_positions_path)
 
   expect_equal(sum(get_geoms(output) == "rasterann"),2)
   expect_equal(sum(get_geoms(output) == "point"),4)

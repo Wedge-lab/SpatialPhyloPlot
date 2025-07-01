@@ -2,5 +2,6 @@
 
 export(SpatialPhyloPlot)
 import(RColorBrewer)
+import(Seurat)
 import(ggforce)
 import(ggplot2)

@@ -10,7 +10,7 @@ img_get_raster(image_path)
 \item{image_path}{File path to the underlying Visium 10X tissue image, which will be plotted.}
 }
 \value{
-An image raster object which is used to plot the tissue image.
+An image magick object which is used to plot the tissue image.
 }
 \description{
 Get Raster Image

@@ -1,7 +1,7 @@
 Package: SpatialPhyloPlot
 Type: Package
 Title: What the Package Does (Title Case)
-Version: 0.1.0
+Version: 0.2.0
 Authors@R: c(
     person(
       "Maria", "Jakobsdottir",
@@ -13,8 +13,8 @@ Description: An R package to plot phylogenetic trees generated from 10X Visium s
 License: What license is it under?
 Encoding: UTF-8
 LazyData: true
-URL: https://github.com/mjakobs/SpatialPlots
-BugReports: https://github.com/mjakobs/SpatialPlots/issues
+URL: https://github.com/Wedge-lab/SpatialPhyloPlot
+BugReports: https://github.com/Wedge-lab/SpatialPhyloPlot
 Depends:
     Seurat (>= 4.0.0)
 Imports:
@@ -24,7 +24,8 @@ Imports:
     ggplot2,
     igraph,
     magick,
-    RColorBrewer
+    RColorBrewer,
+    Seurat
 Suggests: 
     testthat,
     SeuratData

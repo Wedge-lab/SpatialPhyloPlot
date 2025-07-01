@@ -47,6 +47,12 @@ clone_barcodes_scaled$new_y_scaled <- (clone_barcodes_rotate$new_y-min(clone_bar
 # move hires png to test data
 image_file_path <- "./testdata/tissue_hires_image.png"
 
+# tissue positions file - created for mouse brain using other Visium v1 data
+tissue_positions_path <- "./testdata/tissue_positions_list.csv"
+tissue_positions_data <- read.csv(tissue_positions_path, header = FALSE)
+colnames(tissue_positions_data) <- c("barcode","in_tissue","array_row","array_col",
+                                     "pxl_row_in_fullres", "pxl_col_in_fullres")
+
 # Make a colour palette
 test_palette <- c("blue","grey","black","red")
 names(test_palette) <- c("A","B","C","D")

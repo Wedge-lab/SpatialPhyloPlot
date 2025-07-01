@@ -19,20 +19,21 @@ rotate_coordinates <- function(coordinates_df) {
 
 #' Scale Coordinates
 #'
+#' @param tissue_positions A `data.frame` with tissue positions for each spot.
 #' @param coordinates_df A `data.frame` with rotated spot coordinates.
-#' @param visium A `Seurat` Visium 10X object.
 #'
 #' @returns A `data.frame` with Visium 10X coordinates scaled from 0-1.
 #'
-scale_coordinates <- function(coordinates_df, visium){
+scale_coordinates <- function(coordinates_df, tissue_positions){
 
-  lowres_scale <- visium@images[[1]]@scale.factors$lowres
+  xmax_coord <- max(tissue_positions$pxl_col_in_fullres)
+  ymax_coord <- max(tissue_positions$pxl_row_in_fullres)
 
-  xmax_coord <- (dim(visium@images[[1]]@image)/visium@images[[1]]@scale.factors$lowres)[1]
-  ymax_coord <- (dim(visium@images[[1]]@image)/visium@images[[1]]@scale.factors$lowres)[2]
+  xmin_coord <- min(tissue_positions$pxl_col_in_fullres)
+  ymin_coord <- min(tissue_positions$pxl_row_in_fullres)
 
-  coordinates_df$new_x_scaled <- coordinates_df$new_x/xmax_coord
-  coordinates_df$new_y_scaled <- (coordinates_df$new_y + ymax_coord)/ymax_coord
+  coordinates_df$new_x_scaled <- (coordinates_df$new_x - xmin_coord)/(xmax_coord - xmin_coord)
+  coordinates_df$new_y_scaled <- (coordinates_df$new_y + ymax_coord)/(ymax_coord - ymin_coord)
 
   return(coordinates_df)
 
@@ -55,7 +56,7 @@ match_clone_barcodes <- function(coordinates_df_scaled,
                                  clone_barcode_name = "Barcode") {
 
   if(!any(coordinates_df_scaled[,coordinate_barcode_name] %in% clones_df[,clone_barcode_name])){
-    stop("Clone barcodes do not batch Visium coordinate barcodes. ")
+    stop("Clone barcodes do not match Visium coordinate barcodes. ")
   }
   if(!all(coordinates_df_scaled[,coordinate_barcode_name] %in% clones_df[,clone_barcode_name]) |
      !all(clones_df[,clone_barcode_name] %in% coordinates_df_scaled[,coordinate_barcode_name])){
