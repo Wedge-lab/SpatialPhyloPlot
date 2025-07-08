@@ -4,12 +4,10 @@
 \alias{img_name_colours}
 \title{Name colours for plotting}
 \usage{
-img_name_colours(newick_df, palette_name = "Set2")
+img_name_colours(newick_df)
 }
 \arguments{
 \item{newick_df}{A data frame generated from the .new phylogenetic tree file.}
-
-\item{palette_name}{The name of the RColorBrewer palette to be used.}
 }
 \value{
 A named list with the colour palette associated with the list of clones.

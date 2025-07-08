@@ -66,7 +66,7 @@ SpatialPhyloPlot(
 
 \item{clone_barcode_column}{The name of the column in `clone_df` that indicates the barcode.}
 
-\item{palette}{A named list of colours for each clone. Defaults to `RColorBrewer` `Set2`.}
+\item{palette}{A named list of colours for each clone. Defaults to `RColorBrewer` `Set2` followed by the `pals` `alphabet` sets.}
 
 \item{plot_points}{Whether individual Visium spots should be plotted. Defaults to `TRUE`.}
 
