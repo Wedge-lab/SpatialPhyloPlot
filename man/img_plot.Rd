@@ -110,7 +110,7 @@ img_plot(
 
 \item{fig_offset_y}{The offset to adjust the histology image y location, if required. Default is `0.011` adjustments not recommended.}
 
-\item{palette}{A named list of colours for each clone. Defaults to `RColorBrewer` `Set2`.}
+\item{palette}{A named list of colours for each clone. Defaults to `RColorBrewer` `Set2` followed by the `pals` `alphabet` sets.}
 
 \item{multisample}{Whether multiple samples are being plotted with the same phylogenetic tree. Defaults to `FALSE`.}
 

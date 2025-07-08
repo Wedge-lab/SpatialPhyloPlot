@@ -24,7 +24,7 @@ Imports:
     ggplot2,
     igraph,
     magick,
-    RColorBrewer,
+    pals,
     Seurat
 Suggests: 
     testthat,

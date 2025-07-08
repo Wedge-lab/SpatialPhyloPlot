@@ -44,15 +44,19 @@ img_crop_raster <- function(raster, hires_scale, tissue_positions) {
 #' Name colours for plotting
 #'
 #' @param newick_df A data frame generated from the .new phylogenetic tree file.
-#' @param palette_name The name of the RColorBrewer palette to be used.
 #'
-#' @import RColorBrewer
+#' @import pals
 #'
 #' @returns A named list with the colour palette associated with the list of clones.
 #'
-img_name_colours <- function(newick_df, palette_name = "Set2") {
+img_name_colours <- function(newick_df) {
   nclones <- length(unique(na.omit(newick_df$colour)))
-  mypal <- RColorBrewer::brewer.pal(n = nclones, name = palette_name)
+
+  long_palette <- c(pals::brewer.set2(n = 8),
+                    pals::alphabet(n = 26),
+                    pals::alphabet2(n = 26))
+
+  mypal <- long_palette[1:nclones]
   names(mypal) <- unique(na.omit(newick_df$colour))
 
   return(mypal)
@@ -74,7 +78,7 @@ img_name_colours <- function(newick_df, palette_name = "Set2") {
 #' @param segment_colour The colour of the phylogenetic tree segments, default is `"grey"`.
 #' @param fig_offset_x The offset to adjust the histology image x_end location, if required. Default is `0.011`, adjustments not recommended.
 #' @param fig_offset_y The offset to adjust the histology image y location, if required. Default is `0.011` adjustments not recommended.
-#' @param palette A named list of colours for each clone. Defaults to `RColorBrewer` `Set2`.
+#' @param palette A named list of colours for each clone. Defaults to `RColorBrewer` `Set2` followed by the `pals` `alphabet` sets.
 #' @param raster_img_left The raster image object containing the tissue image to be plotted to the left of the main image.
 #' @param raster_img_right The raster image object containing the tissue image to be plotted to the right of the main image.
 #' @param raster_img_top The raster image object containing the tissue image to be plotted above the main image.
