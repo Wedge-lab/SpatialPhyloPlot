@@ -112,8 +112,8 @@ SpatialPhyloPlot <- function(visium_object,
   }
   if(!multisample){
     if(any(suppressWarnings(!is.na(c(visium_object_left, visium_object_right, visium_object_top, visium_object_bottom,
-                    image_file_left, image_file_right, image_file_top, image_file_bottom,
-                    clone_df_left, clone_df_right, clone_df_top, clone_df_bottom))))){
+                                     image_file_left, image_file_right, image_file_top, image_file_bottom,
+                                     clone_df_left, clone_df_right, clone_df_top, clone_df_bottom))))){
       stop("Must run 'multisample = TRUE' if providing more than one sample. ")
     }
   }
@@ -296,108 +296,109 @@ SpatialPhyloPlot <- function(visium_object,
 
   if(!shared_clones){
 
-  # Calculate centroids
-  ## multisample first as single sample overwritten as newick_tree_df
-  if(multisample){
-    if(!all(is.na(coords_left))){
-      newick_df_left <- calculate_centroids(newick_df = newick_tree_df,
-                                            coordinates_df_scaled = coords_left)
+    # Calculate centroids
+    ## multisample first as single sample overwritten as newick_tree_df
+    if(multisample){
+      if(!all(is.na(coords_left))){
+        newick_df_left <- calculate_centroids(newick_df = newick_tree_df,
+                                              coordinates_df_scaled = coords_left)
+      }else{
+        newick_df_left <- NA
+      }
+      if(!all(is.na(coords_right))){
+        newick_df_right <- calculate_centroids(newick_df = newick_tree_df,
+                                               coordinates_df_scaled = coords_right)
+      }else{
+        newick_df_right <- NA
+      }
+      if(!all(is.na(coords_top))){
+        newick_df_top <- calculate_centroids(newick_df = newick_tree_df,
+                                             coordinates_df_scaled = coords_top)
+      }else{
+        newick_df_top <- NA
+      }
+      if(!all(is.na(coords_bottom))){
+        newick_df_bottom <- calculate_centroids(newick_df = newick_tree_df,
+                                                coordinates_df_scaled = coords_bottom)
+      }else{
+        newick_df_bottom <- NA
+      }
     }else{
       newick_df_left <- NA
-    }
-    if(!all(is.na(coords_right))){
-      newick_df_right <- calculate_centroids(newick_df = newick_tree_df,
-                                            coordinates_df_scaled = coords_right)
-    }else{
       newick_df_right <- NA
-    }
-    if(!all(is.na(coords_top))){
-      newick_df_top <- calculate_centroids(newick_df = newick_tree_df,
-                                            coordinates_df_scaled = coords_top)
-    }else{
       newick_df_top <- NA
-    }
-    if(!all(is.na(coords_bottom))){
-      newick_df_bottom <- calculate_centroids(newick_df = newick_tree_df,
-                                            coordinates_df_scaled = coords_bottom)
-    }else{
       newick_df_bottom <- NA
     }
-  }else{
-    newick_df_left <- NA
-    newick_df_right <- NA
-    newick_df_top <- NA
-    newick_df_bottom <- NA
-  }
 
-  newick_tree_df <- calculate_centroids(newick_df = newick_tree_df,
-                                        coordinates_df_scaled = coords)
+    newick_tree_df <- calculate_centroids(newick_df = newick_tree_df,
+                                          coordinates_df_scaled = coords)
 
-  # Create segments
-  segments <- create_segments(newick_tree_df)
+    # Create segments
+    segments <- create_segments(newick_tree_df)
 
-  if(multisample){
-    if(!all(is.na(newick_df_left))){
-      segments_left <- create_segments(newick_df_left)
+    if(multisample){
+      if(!all(is.na(newick_df_left))){
+        segments_left <- create_segments(newick_df_left)
+      }else{
+        segments_left <- NA
+      }
+      if(!all(is.na(newick_df_right))){
+        segments_right <- create_segments(newick_df_right)
+      }else{
+        segments_right <- NA
+      }
+      if(!all(is.na(newick_df_top))){
+        segments_top <- create_segments(newick_df_top)
+      }else{
+        segments_top <- NA
+      }
+      if(!all(is.na(newick_df_bottom))){
+        segments_bottom <- create_segments(newick_df_bottom)
+      }else{
+        segments_bottom <- NA
+      }
     }else{
       segments_left <- NA
-    }
-    if(!all(is.na(newick_df_right))){
-      segments_right <- create_segments(newick_df_right)
-    }else{
       segments_right <- NA
-    }
-    if(!all(is.na(newick_df_top))){
-      segments_top <- create_segments(newick_df_top)
-    }else{
       segments_top <- NA
-    }
-    if(!all(is.na(newick_df_bottom))){
-      segments_bottom <- create_segments(newick_df_bottom)
-    }else{
       segments_bottom <- NA
     }
-  }else{
-    segments_left <- NA
-    segments_right <- NA
-    segments_top <- NA
-    segments_bottom <- NA
-  }
 
-  # combine newick objects for multisample
-  if(multisample){
-    multi_newick <- newick_tree_df
-    multi_newick$Origin <- "Centre"
+    # combine newick objects for multisample
+    if(multisample){
+      multi_newick <- newick_tree_df
+      multi_newick$Origin <- "Centre"
 
-    if(!all(is.na(newick_df_left))){
-      newick_df_left$Origin <- "Left"
-      multi_newick <- rbind(multi_newick, newick_df_left)
+      if(!all(is.na(newick_df_left))){
+        newick_df_left$Origin <- "Left"
+        multi_newick <- rbind(multi_newick, newick_df_left)
+      }
+      if(!all(is.na(newick_df_right))){
+        newick_df_right$Origin <- "Right"
+        multi_newick <- rbind(multi_newick, newick_df_right)
+      }
+      if(!all(is.na(newick_df_top))){
+        newick_df_top$Origin <- "Top"
+        multi_newick <- rbind(multi_newick, newick_df_top)
+      }
+      if(!all(is.na(newick_df_bottom))){
+        newick_df_bottom$Origin <- "Bottom"
+        multi_newick <- rbind(multi_newick, newick_df_bottom)
+      }
     }
-    if(!all(is.na(newick_df_right))){
-      newick_df_right$Origin <- "Right"
-      multi_newick <- rbind(multi_newick, newick_df_right)
-    }
-    if(!all(is.na(newick_df_top))){
-      newick_df_top$Origin <- "Top"
-      multi_newick <- rbind(multi_newick, newick_df_top)
-    }
-    if(!all(is.na(newick_df_bottom))){
-      newick_df_bottom$Origin <- "Bottom"
-      multi_newick <- rbind(multi_newick, newick_df_bottom)
-    }
-  }
 
-  # get connections between plots for multisample
-  if(multisample){
-    connections_coords <- connect_multisample(multi_newick)
-  }else{
-    connections_coords <- NA
-  }
+    # get connections between plots for multisample
+    if(multisample){
+      connections_coords <- connect_multisample(multi_newick)
+    }else{
+      connections_coords <- NA
+    }
 
   }else{
     # TODO: add code here to calculate centroids together as one object
     # merge coords and calculate centroids
     coords_df <- coords
+
     if(multisample){
       if(!all(is.na(coords_left))){
         coords_df <- rbind(coords_df, coords_left)
