@@ -142,6 +142,7 @@ img_plot <- function(raster_img,
                      fig_offset_y = 0,
                      palette,
                      multisample,
+                     shared_clones,
                      plot_connections,
                      connections_coords,
                      connection_width,
@@ -195,7 +196,7 @@ img_plot <- function(raster_img,
       geom_point(data = coordinates_df_scaled, aes(x = new_x_scaled, y = new_y_scaled, colour = Clone),
                  alpha = point_alpha, show.legend = NA)
     # plotting multisample points
-    if(multisample){
+    if(multisample & !shared_clones){
       if(!all(is.na(coordinates_df_scaled_left))){
         p <- p +
           geom_point(data = coordinates_df_scaled_left, aes(x = new_x_scaled, y = new_y_scaled, colour = Clone),
@@ -226,7 +227,7 @@ img_plot <- function(raster_img,
                      alpha = hull_alpha, expand=hull_expansion, show.legend = NA)
 
     ## If plotting multisample
-    if(multisample){
+    if(multisample & !shared_clones){
       if(!all(is.na(coordinates_df_scaled_left))){
         p <- p +
           geom_mark_hull(data = coordinates_df_scaled_left, aes(x = new_x_scaled, y = new_y_scaled, fill = Clone),
@@ -256,7 +257,7 @@ img_plot <- function(raster_img,
                  colour = segment_colour, linewidth = segment_width, alpha = segment_alpha)
 
   ## plotting multisample
-  if(multisample){
+  if(multisample & !shared_clones){
     if(!all(is.na(from_to_df_left))){
       p <- p +
         geom_segment(data = from_to_df_left, aes(x = from_x, y = from_y, xend = to_x, yend = to_y),
@@ -280,7 +281,7 @@ img_plot <- function(raster_img,
   }
 
   # Plotting connections between multisample plots
-  if(multisample){
+  if(multisample & !shared_clones){
     if(plot_connections){
       if(!all(is.na(newick_df_left))){
         p <- p +
@@ -312,7 +313,7 @@ img_plot <- function(raster_img,
                size = centroid_size, alpha = centroid_alpha, show.legend = NA, shape = 21, colour = "black")
 
   # if multisample
-  if(multisample){
+  if(multisample & !shared_clones){
     if(!all(is.na(newick_df_left))){
       p <- p +
         geom_point(data = subset(newick_df_left, !is.na(colour)), aes(x = centroid_x, y = centroid_y, colour = colour, fill = colour),

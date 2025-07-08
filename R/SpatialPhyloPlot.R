@@ -63,6 +63,7 @@ SpatialPhyloPlot <- function(visium_object,
                              fig_offset_y = 0,
                              # Multisample options
                              multisample = FALSE,
+                             shared_clones = FALSE,
                              plot_connections = FALSE,
                              visium_object_left = NA,
                              visium_object_right = NA,
@@ -293,6 +294,8 @@ SpatialPhyloPlot <- function(visium_object,
   # Newick tree to graph df
   newick_tree_df <- newick_to_graph_df(newick_file)
 
+  if(!shared_clones){
+
   # Calculate centroids
   ## multisample first as single sample overwritten as newick_tree_df
   if(multisample){
@@ -361,6 +364,77 @@ SpatialPhyloPlot <- function(visium_object,
     segments_bottom <- NA
   }
 
+  # combine newick objects for multisample
+  if(multisample){
+    multi_newick <- newick_tree_df
+    multi_newick$Origin <- "Centre"
+
+    if(!all(is.na(newick_df_left))){
+      newick_df_left$Origin <- "Left"
+      multi_newick <- rbind(multi_newick, newick_df_left)
+    }
+    if(!all(is.na(newick_df_right))){
+      newick_df_right$Origin <- "Right"
+      multi_newick <- rbind(multi_newick, newick_df_right)
+    }
+    if(!all(is.na(newick_df_top))){
+      newick_df_top$Origin <- "Top"
+      multi_newick <- rbind(multi_newick, newick_df_top)
+    }
+    if(!all(is.na(newick_df_bottom))){
+      newick_df_bottom$Origin <- "Bottom"
+      multi_newick <- rbind(multi_newick, newick_df_bottom)
+    }
+  }
+
+  # get connections between plots for multisample
+  if(multisample){
+    connections_coords <- connect_multisample(multi_newick)
+  }else{
+    connections_coords <- NA
+  }
+
+  }else{
+    # TODO: add code here to calculate centroids together as one object
+    # merge coords and calculate centroids
+    coords_df <- coords
+    if(multisample){
+      if(!all(is.na(coords_left))){
+        coords_df <- rbind(coords_df, coords_left)
+      }
+      if(!all(is.na(coords_right))){
+        coords_df <- rbind(coords_df, coords_right)
+      }
+      if(!all(is.na(coords_top))){
+        coords_df <- rbind(coords_df, coords_top)
+      }
+      if(!all(is.na(coords_bottom))){
+        coords_df <- rbind(coords_df, coords_bottom)
+      }
+
+      # NA to other Newick data frames as we have a merged one
+      newick_df_left <- NA
+      newick_df_right <- NA
+      newick_df_top <- NA
+      newick_df_bottom <- NA
+
+      newick_tree_df <- calculate_centroids(newick_df = newick_tree_df,
+                                            coordinates_df_scaled = coords_df)
+
+      # NA to side segments as we have a joint one
+      segments_left <- NA
+      segments_right <- NA
+      segments_top <- NA
+      segments_bottom <- NA
+
+      segments <- create_segments(newick_tree_df)
+
+      coords <- coords_df
+    }
+  }
+
+
+
   ############# Plotting functions
 
   # get raster image
@@ -399,35 +473,7 @@ SpatialPhyloPlot <- function(visium_object,
     raster_image_bottom <- NA
   }
 
-  # combine newick objects for multisample
-  if(multisample){
-    multi_newick <- newick_tree_df
-    multi_newick$Origin <- "Centre"
 
-    if(!all(is.na(newick_df_left))){
-      newick_df_left$Origin <- "Left"
-      multi_newick <- rbind(multi_newick, newick_df_left)
-    }
-    if(!all(is.na(newick_df_right))){
-      newick_df_right$Origin <- "Right"
-      multi_newick <- rbind(multi_newick, newick_df_right)
-    }
-    if(!all(is.na(newick_df_top))){
-      newick_df_top$Origin <- "Top"
-      multi_newick <- rbind(multi_newick, newick_df_top)
-    }
-    if(!all(is.na(newick_df_bottom))){
-      newick_df_bottom$Origin <- "Bottom"
-      multi_newick <- rbind(multi_newick, newick_df_bottom)
-    }
-  }
-
-  # get connections between plots for multisample
-  if(multisample){
-    connections_coords <- connect_multisample(multi_newick)
-  }else{
-    connections_coords <- NA
-  }
 
 
   # get colour palette
@@ -477,6 +523,7 @@ SpatialPhyloPlot <- function(visium_object,
     fig_offset_x = fig_offset_x,
     fig_offset_y = fig_offset_y,
     multisample = multisample,
+    shared_clones = shared_clones,
     plot_connections = plot_connections,
     connections_coords = connections_coords,
     connection_colour = connection_colour,
