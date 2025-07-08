@@ -119,18 +119,30 @@ calculate_centroids <- function(newick_df, coordinates_df_scaled) {
   }
 
   # calculate a centroid of centroids for in between points
-  for(i in 1:nrow(newick_df)){
+  # repeat this three times in case there are layers of internal points
+  x = 1
+  repeat{
+    for(i in 1:nrow(newick_df)){
 
-    if(is.na(newick_df$centroid_x[i])){
-      parents <- subset(newick_df, to == newick_df$from[i])
-      relations <- subset(newick_df, from == newick_df$to[i])
+      if(is.na(newick_df$centroid_x[i])){
+        parents <- subset(newick_df, to == newick_df$from[i])
+        relations <- subset(newick_df, from == newick_df$to[i])
 
-      family <- rbind(parents, relations)
+        family <- rbind(parents, relations)
 
-      newick_df$centroid_x[i] <- mean(na.omit(family$centroid_x))
-      newick_df$centroid_y[i] <- mean(na.omit(family$centroid_y))
+        newick_df$centroid_x[i] <- mean(na.omit(family$centroid_x))
+        newick_df$centroid_y[i] <- mean(na.omit(family$centroid_y))
 
+      }
     }
+
+    # Break statement to terminate if x > 2
+    if (x > 2) {
+      break
+    }
+
+    # Increment x by 1
+    x = x + 1
   }
 
   newick_df$colour <- ifelse(newick_df$to %in% coordinates_df_scaled[,"Clone"], yes = newick_df$to, no = NA)
