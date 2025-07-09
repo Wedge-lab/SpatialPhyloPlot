@@ -105,7 +105,7 @@ newick_to_graph_df <- function(newick_file) {
 #'
 #' @returns A `data.frame` with centroids calculated for each clone in the phylogenetic tree.
 #'
-calculate_centroids <- function(newick_df, coordinates_df_scaled) {
+calculate_centroids <- function(newick_df, coordinates_df_scaled, n_repeats) {
   # Try new way of formatting tree
   newick_df$centroid_x <- NA
   newick_df$centroid_y <- NA
@@ -119,7 +119,7 @@ calculate_centroids <- function(newick_df, coordinates_df_scaled) {
   }
 
   # calculate a centroid of centroids for in between points
-  # repeat this three times in case there are layers of internal points
+  # repeat this n_repeats times in case there are layers of internal points
   x = 1
   repeat{
     for(i in 1:nrow(newick_df)){
@@ -137,7 +137,7 @@ calculate_centroids <- function(newick_df, coordinates_df_scaled) {
     }
 
     # Break statement to terminate if x > 2
-    if (x > 2) {
+    if (x > n_repeats) {
       break
     }
 

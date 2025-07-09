@@ -21,6 +21,10 @@ SpatialPhyloPlot(
   hull_expansion = 0.005,
   centroid_alpha = 0.9,
   centroid_size = 8,
+  plot_internal_nodes = FALSE,
+  internal_node_colour = "grey80",
+  internal_node_size = 3,
+  internal_node_alpha = 0.5,
   segment_alpha = 0.8,
   segment_width = 2,
   segment_colour = "grey",
@@ -47,6 +51,7 @@ SpatialPhyloPlot(
   tissue_positions_file_bottom = NA,
   connection_width = 1,
   connection_colour = "grey",
+  nestedness = 10,
   ...
 )
 }
@@ -82,6 +87,14 @@ SpatialPhyloPlot(
 \item{centroid_alpha}{The alpha transparency value for the centroids plotted as part of the phylogenetic tree, default is `0.9`.}
 
 \item{centroid_size}{The size of the plotted centroid points, default is `8`.}
+
+\item{plot_internal_nodes}{Whether or not to plot internal nodes in the tree. Defaults to `FALSE`.}
+
+\item{internal_node_colour}{Colour used to represent internal nodes. Defaults to `"grey80"`.}
+
+\item{internal_node_size}{Size of internal nodes. Defaults to `3`.}
+
+\item{internal_node_alpha}{Alpha for internal nodes. Defaults to `0.5`}
 
 \item{segment_alpha}{The alpha transparency value for phylogenetic tree segments, default is `0.8`.}
 
@@ -134,6 +147,8 @@ SpatialPhyloPlot(
 \item{connection_width}{The width of the connecting segment linking clones between samples. Defaults to `1`.}
 
 \item{connection_colour}{The colour of the connecting segment linking clones between samples. Defaults to `grey`.}
+
+\item{nestedness}{Roughly, how many layers of internal nodes there are in the phylogenetic tree. Defaults to `10`. Consider increasing if you notice missing connections, otherwise leave as is.}
 }
 \value{
 A ggplot2 object with the tissue, clones, and phylogenetic trees plotted together.

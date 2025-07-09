@@ -4,7 +4,7 @@
 \alias{calculate_centroids}
 \title{Calculate centroids}
 \usage{
-calculate_centroids(newick_df, coordinates_df_scaled)
+calculate_centroids(newick_df, coordinates_df_scaled, n_repeats)
 }
 \arguments{
 \item{newick_df}{A `data.frame` containing the reformatted Newick phylogenetic tree information.}

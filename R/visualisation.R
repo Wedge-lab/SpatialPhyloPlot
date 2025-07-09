@@ -103,6 +103,10 @@ img_name_colours <- function(newick_df) {
 #' @param connections_coords A `data.frame` of coordinates linking clones found in multiple samples.
 #' @param connection_width The width of the connecting segment linking clones between samples. Defaults to `1`.
 #' @param connection_colour The colour of the connecting segment linking clones between samples. Defaults to `grey`.
+#' @param plot_internal_nodes Whether or not to plot internal nodes in the tree. Defaults to `FALSE`.
+#' @param internal_node_colour Colour used to represent internal nodes. Defaults to `"grey80"`.
+#' @param internal_node_size Size of internal nodes. Defaults to `3`.
+#' @param internal_node_alpha Alpha for internal nodes. Defaults to `0.5`
 #'
 #' @import ggplot2
 #' @import ggforce
@@ -136,6 +140,10 @@ img_plot <- function(raster_img,
                      hull_expansion = 0.005,
                      centroid_alpha = 0.9,
                      centroid_size = 8,
+                     plot_internal_nodes = FALSE,
+                     internal_node_colour = "grey80",
+                     internal_node_size = 3,
+                     internal_node_alpha = 0.5,
                      segment_alpha = 0.8,
                      segment_width = 2,
                      segment_colour = "grey",
@@ -307,6 +315,36 @@ img_plot <- function(raster_img,
     }
   }
 
+  # If plotting internal nodes/centroids
+  if(plot_internal_nodes){
+    p <- p +
+      geom_point(data = subset(newick_df, is.na(colour)), aes(x = centroid_x, y = centroid_y, colour = "Internal Node", fill = internal_node_colour),
+                 size = internal_node_size, alpha = internal_node_alpha, show.legend = NA, shape = 21, colour = internal_node_colour)
+
+    if(multisample & shared_clones){
+      if(!all(is.na(newick_df_left))){
+        p <- p +
+          geom_point(data = subset(newick_df_left, is.na(colour)), aes(x = centroid_x, y = centroid_y, colour = "Internal Node", fill = internal_node_colour),
+                     size = internal_node_size, alpha = internal_node_alpha, show.legend = NA, shape = 21, colour = internal_node_colour)
+      }
+      if(!all(is.na(newick_df_right))){
+        p <- p +
+          geom_point(data = subset(newick_df_right, is.na(colour)), aes(x = centroid_x, y = centroid_y, colour = "Internal Node", fill = internal_node_colour),
+                     size = internal_node_size, alpha = internal_node_alpha, show.legend = NA, shape = 21, colour = internal_node_colour)
+      }
+      if(!all(is.na(newick_df_top))){
+        p <- p +
+          geom_point(data = subset(newick_df_top, is.na(colour)), aes(x = centroid_x, y = centroid_y, colour = "Internal Node", fill = internal_node_colour),
+                     size = internal_node_size, alpha = internal_node_alpha, show.legend = NA, shape = 21, colour = internal_node_colour)
+      }
+      if(!all(is.na(newick_df_bottom))){
+        p <- p +
+          geom_point(data = subset(newick_df_bottom, is.na(colour)), aes(x = centroid_x, y = centroid_y, colour = "Internal Node", fill = internal_node_colour),
+                     size = internal_node_size, alpha = internal_node_alpha, show.legend = NA, shape = 21, colour = internal_node_colour)
+      }
+    }
+  }
+
   # plotting centroids
 
   p <- p +
@@ -336,6 +374,7 @@ img_plot <- function(raster_img,
                    size = centroid_size, alpha = centroid_alpha, show.legend = NA, shape = 21, colour = "black")
     }
   }
+
 
 
   # Plot tidy and colour
