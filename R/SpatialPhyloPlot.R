@@ -294,7 +294,15 @@ SpatialPhyloPlot <- function(visium_object,
   # Newick tree to graph df
   newick_tree_df <- newick_to_graph_df(newick_file)
 
-  if(shared_clones){
+  if(!multisample){
+    newick_tree_df <- calculate_centroids(newick_df = newick_tree_df,
+                                          coordinates_df_scaled = coords)
+
+    # Create segments
+    segments <- create_segments(newick_tree_df)
+  }
+
+  if(shared_clones & multisample){
 
     # Calculate centroids
     ## multisample first as single sample overwritten as newick_tree_df
@@ -394,7 +402,7 @@ SpatialPhyloPlot <- function(visium_object,
       connections_coords <- NA
     }
 
-  }else{
+  }else if(!shared_clones & multisample){
     # TODO: add code here to calculate centroids together as one object
     # merge coords and calculate centroids
     coords_df <- coords
