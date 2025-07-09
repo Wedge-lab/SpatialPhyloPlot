@@ -102,13 +102,21 @@ newick_to_graph_df <- function(newick_file) {
 #'
 #' @param newick_df A `data.frame` containing the reformatted Newick phylogenetic tree information.
 #' @param coordinates_df_scaled A `data.frame` containing scaled spot coordinates and the barcodes that they correspond to.
+#' @param n_repeats Roughly, how many layers of internal nodes there are in the phylogenetic tree. Defaults to `10`. Consider increasing if you notice missing connections, otherwise leave as is.
+#' @param origin_coord xy coordinates at which to plot the "origin" of the phylogenetic tree. Defaults to `NA`. Example: `c(0,1)` for top left corner.
+#' @param origin_name Name of the origin clone in the phylogenetic tree. Defaults to `"diploid"` in line with MEDICC2 output.
 #'
 #' @returns A `data.frame` with centroids calculated for each clone in the phylogenetic tree.
 #'
-calculate_centroids <- function(newick_df, coordinates_df_scaled, n_repeats) {
+calculate_centroids <- function(newick_df, coordinates_df_scaled, n_repeats, origin_coord, origin_name) {
   # Try new way of formatting tree
   newick_df$centroid_x <- NA
   newick_df$centroid_y <- NA
+
+  if(all(!is.na(origin_coord))){
+    newick_df[newick_df$to == origin_name,]$centroid_x <- origin_coord[1]
+    newick_df[newick_df$to == origin_name,]$centroid_y <- origin_coord[2]
+  }
 
   for(i in 1:nrow(newick_df)){
     spot_sub <- coordinates_df_scaled[coordinates_df_scaled[,"Clone"] == newick_df$to[i],]#subset(coordinates_df_scaled, clone_group_column == newick_df$to[i])

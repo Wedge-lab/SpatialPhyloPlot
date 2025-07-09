@@ -32,6 +32,8 @@
 #' @param tissue_positions_file_top If running in multisample mode; a path to the Visium 10X `tissue_positions_list.csv` file for V1 or `tissue_positions.csv` file for V2, belonging to the sample plotted above the main sample.
 #' @param tissue_positions_file_bottom If running in multisample mode; a path to the Visium 10X `tissue_positions_list.csv` file for V1 or `tissue_positions.csv` file for V2, belonging to the sample plotted below the main sample.
 #' @param nestedness Roughly, how many layers of internal nodes there are in the phylogenetic tree. Defaults to `10`. Consider increasing if you notice missing connections, otherwise leave as is.
+#' @param origin_coord xy coordinates at which to plot the "origin" of the phylogenetic tree. Defaults to `NA`. Example: `c(0,1)` for top left corner.
+#' @param origin_name Name of the origin clone in the phylogenetic tree. Defaults to `"diploid"` in line with MEDICC2 output.
 #'
 #' @import ggplot2
 #' @import ggforce
@@ -89,6 +91,8 @@ SpatialPhyloPlot <- function(visium_object,
                              connection_width = 1,
                              connection_colour = "grey",
                              nestedness = 10,
+                             origin_coord = NA,
+                             origin_name = "diploid",
                              ...) {
   ############# Check inputs
   if(all(!("Seurat" %in% class(visium_object)))){
@@ -303,7 +307,9 @@ SpatialPhyloPlot <- function(visium_object,
   if(!multisample){
     newick_tree_df <- calculate_centroids(newick_df = newick_tree_df,
                                           coordinates_df_scaled = coords,
-                                          n_repeats = nestedness)
+                                          n_repeats = nestedness,
+                                          origin_coord = origin_coord,
+                                          origin_name = origin_name)
 
     # Create segments
     segments <- create_segments(newick_tree_df)
@@ -317,28 +323,36 @@ SpatialPhyloPlot <- function(visium_object,
       if(!all(is.na(coords_left))){
         newick_df_left <- calculate_centroids(newick_df = newick_tree_df,
                                               coordinates_df_scaled = coords_left,
-                                              n_repeats= nestedness)
+                                              n_repeats= nestedness,
+                                              origin_coord = origin_coord,
+                                              origin_name = origin_name)
       }else{
         newick_df_left <- NA
       }
       if(!all(is.na(coords_right))){
         newick_df_right <- calculate_centroids(newick_df = newick_tree_df,
                                                coordinates_df_scaled = coords_right,
-                                               n_repeats= nestedness)
+                                               n_repeats= nestedness,
+                                               origin_coord = origin_coord,
+                                               origin_name = origin_name)
       }else{
         newick_df_right <- NA
       }
       if(!all(is.na(coords_top))){
         newick_df_top <- calculate_centroids(newick_df = newick_tree_df,
                                              coordinates_df_scaled = coords_top,
-                                             n_repeats= nestedness)
+                                             n_repeats= nestedness,
+                                             origin_coord = origin_coord,
+                                             origin_name = origin_name)
       }else{
         newick_df_top <- NA
       }
       if(!all(is.na(coords_bottom))){
         newick_df_bottom <- calculate_centroids(newick_df = newick_tree_df,
                                                 coordinates_df_scaled = coords_bottom,
-                                                n_repeats= nestedness)
+                                                n_repeats= nestedness,
+                                                origin_coord = origin_coord,
+                                                origin_name = origin_name)
       }else{
         newick_df_bottom <- NA
       }
@@ -351,7 +365,9 @@ SpatialPhyloPlot <- function(visium_object,
 
     newick_tree_df <- calculate_centroids(newick_df = newick_tree_df,
                                           coordinates_df_scaled = coords,
-                                          n_repeats= nestedness)
+                                          n_repeats= nestedness,
+                                          origin_coord = origin_coord,
+                                          origin_name = origin_name)
 
     # Create segments
     segments <- create_segments(newick_tree_df)
@@ -415,7 +431,7 @@ SpatialPhyloPlot <- function(visium_object,
     }
 
   }else if(!shared_clones & multisample){
-    # TODO: add code here to calculate centroids together as one object
+    # Calculate centroids together as one object
     # merge coords and calculate centroids
     coords_df <- coords
 
@@ -441,7 +457,9 @@ SpatialPhyloPlot <- function(visium_object,
 
       newick_tree_df <- calculate_centroids(newick_df = newick_tree_df,
                                             coordinates_df_scaled = coords_df,
-                                            n_repeats= nestedness)
+                                            n_repeats= nestedness,
+                                            origin_coord = origin_coord,
+                                            origin_name = origin_name)
 
       # NA to side segments as we have a joint one
       segments_left <- NA
