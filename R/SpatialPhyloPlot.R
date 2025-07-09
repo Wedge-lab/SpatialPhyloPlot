@@ -294,7 +294,7 @@ SpatialPhyloPlot <- function(visium_object,
   # Newick tree to graph df
   newick_tree_df <- newick_to_graph_df(newick_file)
 
-  if(!shared_clones){
+  if(shared_clones){
 
     # Calculate centroids
     ## multisample first as single sample overwritten as newick_tree_df
@@ -481,7 +481,7 @@ SpatialPhyloPlot <- function(visium_object,
   if(any(palette == "default")){
     my_palette <- img_name_colours(newick_tree_df)
 
-    if(multisample){
+    if(multisample & shared_clones){
       my_palette <- img_name_colours(multi_newick, ...)
     }
   }else{
