@@ -27,6 +27,7 @@ SpatialPhyloPlot(
   fig_offset_x = 0,
   fig_offset_y = 0,
   multisample = FALSE,
+  shared_clones = FALSE,
   plot_connections = FALSE,
   visium_object_left = NA,
   visium_object_right = NA,
@@ -93,6 +94,8 @@ SpatialPhyloPlot(
 \item{fig_offset_y}{The offset to adjust the histology image y location, if required. Default is `0.011` adjustments not recommended.}
 
 \item{multisample}{Whether multiple samples are being plotted with the same phylogenetic tree. Defaults to `FALSE`.}
+
+\item{shared_clones}{Whether the same clones appear in multiple samples. Defaults to `FALSE`.}
 
 \item{plot_connections}{Whether connections should be plotted between clones that are present in multiple samples. Defaults to `FALSE`.}
 

@@ -39,6 +39,7 @@ img_plot(
   fig_offset_y = 0,
   palette,
   multisample,
+  shared_clones,
   plot_connections,
   connections_coords,
   connection_width,
@@ -113,6 +114,8 @@ img_plot(
 \item{palette}{A named list of colours for each clone. Defaults to `RColorBrewer` `Set2` followed by the `pals` `alphabet` sets.}
 
 \item{multisample}{Whether multiple samples are being plotted with the same phylogenetic tree. Defaults to `FALSE`.}
+
+\item{shared_clones}{Whether the same clones appear in multiple samples. Defaults to `FALSE`.}
 
 \item{plot_connections}{Whether connections should be plotted between clones that are present in multiple samples. Defaults to `FALSE`.}
 

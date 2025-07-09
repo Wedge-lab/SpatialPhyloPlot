@@ -98,6 +98,7 @@ img_name_colours <- function(newick_df) {
 #' @param plot_points Whether individual Visium spots should be plotted. Defaults to `TRUE`.
 #' @param plot_polygon Whether a polygon should be plotted for each clone. Defaults to `FALSE`.
 #' @param multisample Whether multiple samples are being plotted with the same phylogenetic tree. Defaults to `FALSE`.
+#' @param shared_clones Whether the same clones appear in multiple samples. Defaults to `FALSE`.
 #' @param plot_connections Whether connections should be plotted between clones that are present in multiple samples. Defaults to `FALSE`.
 #' @param connections_coords A `data.frame` of coordinates linking clones found in multiple samples.
 #' @param connection_width The width of the connecting segment linking clones between samples. Defaults to `1`.
