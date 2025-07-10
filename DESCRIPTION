@@ -10,7 +10,7 @@ Authors@R: c(
     )
   )
 Description: An R package to plot phylogenetic trees generated from 10X Visium spatial transcriptomics data in their spatial context. 
-License: What license is it under?
+License: GPL (>= 3)
 Encoding: UTF-8
 LazyData: true
 URL: https://github.com/Wedge-lab/SpatialPhyloPlot
