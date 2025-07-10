@@ -1,6 +1,6 @@
 Package: SpatialPhyloPlot
 Type: Package
-Title: What the Package Does (Title Case)
+Title: Automated Plotting of Phylogenetic Trees on Spatial Transcriptomics Data
 Version: 0.2.0
 Authors@R: c(
     person(
