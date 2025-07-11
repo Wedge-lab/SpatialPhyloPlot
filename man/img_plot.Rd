@@ -32,6 +32,10 @@ img_plot(
   hull_expansion = 0.005,
   centroid_alpha = 0.9,
   centroid_size = 8,
+  plot_internal_nodes = FALSE,
+  internal_node_colour = "grey80",
+  internal_node_size = 3,
+  internal_node_alpha = 0.5,
   segment_alpha = 0.8,
   segment_width = 2,
   segment_colour = "grey",
@@ -39,6 +43,7 @@ img_plot(
   fig_offset_y = 0,
   palette,
   multisample,
+  shared_clones,
   plot_connections,
   connections_coords,
   connection_width,
@@ -100,6 +105,14 @@ img_plot(
 
 \item{centroid_size}{The size of the plotted centroid points, default is `8`.}
 
+\item{plot_internal_nodes}{Whether or not to plot internal nodes in the tree. Defaults to `FALSE`.}
+
+\item{internal_node_colour}{Colour used to represent internal nodes. Defaults to `"grey80"`.}
+
+\item{internal_node_size}{Size of internal nodes. Defaults to `3`.}
+
+\item{internal_node_alpha}{Alpha for internal nodes. Defaults to `0.5`}
+
 \item{segment_alpha}{The alpha transparency value for phylogenetic tree segments, default is `0.8`.}
 
 \item{segment_width}{The width of the phylogenetic tree segments, default is `2`.}
@@ -113,6 +126,8 @@ img_plot(
 \item{palette}{A named list of colours for each clone. Defaults to `RColorBrewer` `Set2` followed by the `pals` `alphabet` sets.}
 
 \item{multisample}{Whether multiple samples are being plotted with the same phylogenetic tree. Defaults to `FALSE`.}
+
+\item{shared_clones}{Whether the same clones appear in multiple samples. Defaults to `FALSE`.}
 
 \item{plot_connections}{Whether connections should be plotted between clones that are present in multiple samples. Defaults to `FALSE`.}
 

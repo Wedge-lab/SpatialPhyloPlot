@@ -31,6 +31,9 @@
 #' @param tissue_positions_file_right If running in multisample mode; a path to the Visium 10X `tissue_positions_list.csv` file for V1 or `tissue_positions.csv` file for V2, belonging to the sample plotted to the right of the main sample.
 #' @param tissue_positions_file_top If running in multisample mode; a path to the Visium 10X `tissue_positions_list.csv` file for V1 or `tissue_positions.csv` file for V2, belonging to the sample plotted above the main sample.
 #' @param tissue_positions_file_bottom If running in multisample mode; a path to the Visium 10X `tissue_positions_list.csv` file for V1 or `tissue_positions.csv` file for V2, belonging to the sample plotted below the main sample.
+#' @param nestedness Roughly, how many layers of internal nodes there are in the phylogenetic tree. Defaults to `10`. Consider increasing if you notice missing connections, otherwise leave as is.
+#' @param origin_coord xy coordinates at which to plot the "origin" of the phylogenetic tree. Defaults to `NA`. Example: `c(0,1)` for top left corner.
+#' @param origin_name Name of the origin clone in the phylogenetic tree. Defaults to `"diploid"` in line with MEDICC2 output.
 #'
 #' @import ggplot2
 #' @import ggforce
@@ -56,6 +59,10 @@ SpatialPhyloPlot <- function(visium_object,
                              hull_expansion = 0.005,
                              centroid_alpha = 0.9,
                              centroid_size = 8,
+                             plot_internal_nodes = FALSE,
+                             internal_node_colour = "grey80",
+                             internal_node_size = 3,
+                             internal_node_alpha = 0.5,
                              segment_alpha = 0.8,
                              segment_width = 2,
                              segment_colour = "grey",
@@ -63,6 +70,7 @@ SpatialPhyloPlot <- function(visium_object,
                              fig_offset_y = 0,
                              # Multisample options
                              multisample = FALSE,
+                             shared_clones = FALSE,
                              plot_connections = FALSE,
                              visium_object_left = NA,
                              visium_object_right = NA,
@@ -82,6 +90,9 @@ SpatialPhyloPlot <- function(visium_object,
                              tissue_positions_file_bottom = NA,
                              connection_width = 1,
                              connection_colour = "grey",
+                             nestedness = 10,
+                             origin_coord = NA,
+                             origin_name = "diploid",
                              ...) {
   ############# Check inputs
   if(all(!("Seurat" %in% class(visium_object)))){
@@ -111,8 +122,8 @@ SpatialPhyloPlot <- function(visium_object,
   }
   if(!multisample){
     if(any(suppressWarnings(!is.na(c(visium_object_left, visium_object_right, visium_object_top, visium_object_bottom,
-                    image_file_left, image_file_right, image_file_top, image_file_bottom,
-                    clone_df_left, clone_df_right, clone_df_top, clone_df_bottom))))){
+                                     image_file_left, image_file_right, image_file_top, image_file_bottom,
+                                     clone_df_left, clone_df_right, clone_df_top, clone_df_bottom))))){
       stop("Must run 'multisample = TRUE' if providing more than one sample. ")
     }
   }
@@ -293,73 +304,176 @@ SpatialPhyloPlot <- function(visium_object,
   # Newick tree to graph df
   newick_tree_df <- newick_to_graph_df(newick_file)
 
-  # Calculate centroids
-  ## multisample first as single sample overwritten as newick_tree_df
-  if(multisample){
-    if(!all(is.na(coords_left))){
-      newick_df_left <- calculate_centroids(newick_df = newick_tree_df,
-                                            coordinates_df_scaled = coords_left)
+  if(!multisample){
+    newick_tree_df <- calculate_centroids(newick_df = newick_tree_df,
+                                          coordinates_df_scaled = coords,
+                                          n_repeats = nestedness,
+                                          origin_coord = origin_coord,
+                                          origin_name = origin_name)
+
+    # Create segments
+    segments <- create_segments(newick_tree_df)
+  }
+
+  if(shared_clones & multisample){
+
+    # Calculate centroids
+    ## multisample first as single sample overwritten as newick_tree_df
+    if(multisample){
+      if(!all(is.na(coords_left))){
+        newick_df_left <- calculate_centroids(newick_df = newick_tree_df,
+                                              coordinates_df_scaled = coords_left,
+                                              n_repeats= nestedness,
+                                              origin_coord = origin_coord,
+                                              origin_name = origin_name)
+      }else{
+        newick_df_left <- NA
+      }
+      if(!all(is.na(coords_right))){
+        newick_df_right <- calculate_centroids(newick_df = newick_tree_df,
+                                               coordinates_df_scaled = coords_right,
+                                               n_repeats= nestedness,
+                                               origin_coord = origin_coord,
+                                               origin_name = origin_name)
+      }else{
+        newick_df_right <- NA
+      }
+      if(!all(is.na(coords_top))){
+        newick_df_top <- calculate_centroids(newick_df = newick_tree_df,
+                                             coordinates_df_scaled = coords_top,
+                                             n_repeats= nestedness,
+                                             origin_coord = origin_coord,
+                                             origin_name = origin_name)
+      }else{
+        newick_df_top <- NA
+      }
+      if(!all(is.na(coords_bottom))){
+        newick_df_bottom <- calculate_centroids(newick_df = newick_tree_df,
+                                                coordinates_df_scaled = coords_bottom,
+                                                n_repeats= nestedness,
+                                                origin_coord = origin_coord,
+                                                origin_name = origin_name)
+      }else{
+        newick_df_bottom <- NA
+      }
     }else{
       newick_df_left <- NA
-    }
-    if(!all(is.na(coords_right))){
-      newick_df_right <- calculate_centroids(newick_df = newick_tree_df,
-                                            coordinates_df_scaled = coords_right)
-    }else{
       newick_df_right <- NA
-    }
-    if(!all(is.na(coords_top))){
-      newick_df_top <- calculate_centroids(newick_df = newick_tree_df,
-                                            coordinates_df_scaled = coords_top)
-    }else{
       newick_df_top <- NA
-    }
-    if(!all(is.na(coords_bottom))){
-      newick_df_bottom <- calculate_centroids(newick_df = newick_tree_df,
-                                            coordinates_df_scaled = coords_bottom)
-    }else{
       newick_df_bottom <- NA
     }
-  }else{
-    newick_df_left <- NA
-    newick_df_right <- NA
-    newick_df_top <- NA
-    newick_df_bottom <- NA
-  }
 
-  newick_tree_df <- calculate_centroids(newick_df = newick_tree_df,
-                                        coordinates_df_scaled = coords)
+    newick_tree_df <- calculate_centroids(newick_df = newick_tree_df,
+                                          coordinates_df_scaled = coords,
+                                          n_repeats= nestedness,
+                                          origin_coord = origin_coord,
+                                          origin_name = origin_name)
 
-  # Create segments
-  segments <- create_segments(newick_tree_df)
+    # Create segments
+    segments <- create_segments(newick_tree_df)
 
-  if(multisample){
-    if(!all(is.na(newick_df_left))){
-      segments_left <- create_segments(newick_df_left)
+    if(multisample){
+      if(!all(is.na(newick_df_left))){
+        segments_left <- create_segments(newick_df_left)
+      }else{
+        segments_left <- NA
+      }
+      if(!all(is.na(newick_df_right))){
+        segments_right <- create_segments(newick_df_right)
+      }else{
+        segments_right <- NA
+      }
+      if(!all(is.na(newick_df_top))){
+        segments_top <- create_segments(newick_df_top)
+      }else{
+        segments_top <- NA
+      }
+      if(!all(is.na(newick_df_bottom))){
+        segments_bottom <- create_segments(newick_df_bottom)
+      }else{
+        segments_bottom <- NA
+      }
     }else{
       segments_left <- NA
-    }
-    if(!all(is.na(newick_df_right))){
-      segments_right <- create_segments(newick_df_right)
-    }else{
       segments_right <- NA
-    }
-    if(!all(is.na(newick_df_top))){
-      segments_top <- create_segments(newick_df_top)
-    }else{
       segments_top <- NA
-    }
-    if(!all(is.na(newick_df_bottom))){
-      segments_bottom <- create_segments(newick_df_bottom)
-    }else{
       segments_bottom <- NA
     }
-  }else{
-    segments_left <- NA
-    segments_right <- NA
-    segments_top <- NA
-    segments_bottom <- NA
+
+    # combine newick objects for multisample
+    if(multisample){
+      multi_newick <- newick_tree_df
+      multi_newick$Origin <- "Centre"
+
+      if(!all(is.na(newick_df_left))){
+        newick_df_left$Origin <- "Left"
+        multi_newick <- rbind(multi_newick, newick_df_left)
+      }
+      if(!all(is.na(newick_df_right))){
+        newick_df_right$Origin <- "Right"
+        multi_newick <- rbind(multi_newick, newick_df_right)
+      }
+      if(!all(is.na(newick_df_top))){
+        newick_df_top$Origin <- "Top"
+        multi_newick <- rbind(multi_newick, newick_df_top)
+      }
+      if(!all(is.na(newick_df_bottom))){
+        newick_df_bottom$Origin <- "Bottom"
+        multi_newick <- rbind(multi_newick, newick_df_bottom)
+      }
+    }
+
+    # get connections between plots for multisample
+    if(multisample){
+      connections_coords <- connect_multisample(multi_newick)
+    }else{
+      connections_coords <- NA
+    }
+
+  }else if(!shared_clones & multisample){
+    # Calculate centroids together as one object
+    # merge coords and calculate centroids
+    coords_df <- coords
+
+    if(multisample){
+      if(!all(is.na(coords_left))){
+        coords_df <- rbind(coords_df, coords_left)
+      }
+      if(!all(is.na(coords_right))){
+        coords_df <- rbind(coords_df, coords_right)
+      }
+      if(!all(is.na(coords_top))){
+        coords_df <- rbind(coords_df, coords_top)
+      }
+      if(!all(is.na(coords_bottom))){
+        coords_df <- rbind(coords_df, coords_bottom)
+      }
+
+      # NA to other Newick data frames as we have a merged one
+      newick_df_left <- NA
+      newick_df_right <- NA
+      newick_df_top <- NA
+      newick_df_bottom <- NA
+
+      newick_tree_df <- calculate_centroids(newick_df = newick_tree_df,
+                                            coordinates_df_scaled = coords_df,
+                                            n_repeats= nestedness,
+                                            origin_coord = origin_coord,
+                                            origin_name = origin_name)
+
+      # NA to side segments as we have a joint one
+      segments_left <- NA
+      segments_right <- NA
+      segments_top <- NA
+      segments_bottom <- NA
+
+      segments <- create_segments(newick_tree_df)
+
+      coords <- coords_df
+    }
   }
+
+
 
   ############# Plotting functions
 
@@ -399,42 +513,14 @@ SpatialPhyloPlot <- function(visium_object,
     raster_image_bottom <- NA
   }
 
-  # combine newick objects for multisample
-  if(multisample){
-    multi_newick <- newick_tree_df
-    multi_newick$Origin <- "Centre"
 
-    if(!all(is.na(newick_df_left))){
-      newick_df_left$Origin <- "Left"
-      multi_newick <- rbind(multi_newick, newick_df_left)
-    }
-    if(!all(is.na(newick_df_right))){
-      newick_df_right$Origin <- "Right"
-      multi_newick <- rbind(multi_newick, newick_df_right)
-    }
-    if(!all(is.na(newick_df_top))){
-      newick_df_top$Origin <- "Top"
-      multi_newick <- rbind(multi_newick, newick_df_top)
-    }
-    if(!all(is.na(newick_df_bottom))){
-      newick_df_bottom$Origin <- "Bottom"
-      multi_newick <- rbind(multi_newick, newick_df_bottom)
-    }
-  }
-
-  # get connections between plots for multisample
-  if(multisample){
-    connections_coords <- connect_multisample(multi_newick)
-  }else{
-    connections_coords <- NA
-  }
 
 
   # get colour palette
   if(any(palette == "default")){
     my_palette <- img_name_colours(newick_tree_df)
 
-    if(multisample){
+    if(multisample & shared_clones){
       my_palette <- img_name_colours(multi_newick, ...)
     }
   }else{
@@ -471,12 +557,16 @@ SpatialPhyloPlot <- function(visium_object,
     hull_expansion = hull_expansion,
     centroid_alpha = centroid_alpha,
     centroid_size = centroid_size,
+    plot_internal_nodes = plot_internal_nodes,
+    internal_node_colour = internal_node_colour,
+    internal_node_size = internal_node_size,
     segment_alpha = segment_alpha,
     segment_width = segment_width,
     segment_colour = segment_colour,
     fig_offset_x = fig_offset_x,
     fig_offset_y = fig_offset_y,
     multisample = multisample,
+    shared_clones = shared_clones,
     plot_connections = plot_connections,
     connections_coords = connections_coords,
     connection_colour = connection_colour,
