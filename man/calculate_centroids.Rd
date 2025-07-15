@@ -4,12 +4,24 @@
 \alias{calculate_centroids}
 \title{Calculate centroids}
 \usage{
-calculate_centroids(newick_df, coordinates_df_scaled, n_repeats)
+calculate_centroids(
+  newick_df,
+  coordinates_df_scaled,
+  n_repeats,
+  origin_coord,
+  origin_name
+)
 }
 \arguments{
 \item{newick_df}{A `data.frame` containing the reformatted Newick phylogenetic tree information.}
 
 \item{coordinates_df_scaled}{A `data.frame` containing scaled spot coordinates and the barcodes that they correspond to.}
+
+\item{n_repeats}{Roughly, how many layers of internal nodes there are in the phylogenetic tree. Defaults to `10`. Consider increasing if you notice missing connections, otherwise leave as is.}
+
+\item{origin_coord}{xy coordinates at which to plot the "origin" of the phylogenetic tree. Defaults to `NA`. Example: `c(0,1)` for top left corner.}
+
+\item{origin_name}{Name of the origin clone in the phylogenetic tree. Defaults to `"diploid"` in line with MEDICC2 output.}
 }
 \value{
 A `data.frame` with centroids calculated for each clone in the phylogenetic tree.

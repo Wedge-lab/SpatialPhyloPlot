@@ -2,14 +2,14 @@
 
 #' Rotate Image Coordinates
 #'
-#' @param coordinates_df A `data.frame` of spot coordinates extracted from the `Seurat` visium 10X data.
+#' @param coordinates_df A `data.frame` of spot coordinates extracted from the tissue positions file.
 #'
 #' @returns A `data.frame` with rotated Visium 10X spot coordinates.
 #'
 rotate_coordinates <- function(coordinates_df) {
 
-  coordinates_df$new_x <- coordinates_df$y
-  coordinates_df$new_y <- -as.numeric(coordinates_df$x)
+  coordinates_df$new_x <- coordinates_df$pxl_col_in_fullres
+  coordinates_df$new_y <- -as.numeric(coordinates_df$pxl_row_in_fullres)
 
   coordinates_df$new_x <- as.numeric(coordinates_df$new_x)
   coordinates_df$new_y <- as.numeric(coordinates_df$new_y)
@@ -52,7 +52,7 @@ scale_coordinates <- function(coordinates_df, tissue_positions){
 match_clone_barcodes <- function(coordinates_df_scaled,
                                  clones_df,
                                  clone_group_name,
-                                 coordinate_barcode_name = "cell",
+                                 coordinate_barcode_name = "barcode",
                                  clone_barcode_name = "Barcode") {
 
   if(!any(coordinates_df_scaled[,coordinate_barcode_name] %in% clones_df[,clone_barcode_name])){

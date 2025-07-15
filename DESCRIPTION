@@ -16,7 +16,6 @@ LazyData: true
 URL: https://github.com/Wedge-lab/SpatialPhyloPlot
 BugReports: https://github.com/Wedge-lab/SpatialPhyloPlot
 Depends:
-    Seurat (>= 4.0.0)
 Imports:
     alakazam,
     ape,
@@ -24,6 +23,7 @@ Imports:
     ggplot2,
     igraph,
     magick,
+    rjson,
     pals,
     Seurat
 Suggests: 
