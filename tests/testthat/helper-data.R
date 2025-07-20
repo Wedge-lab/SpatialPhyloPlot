@@ -1,19 +1,28 @@
 ### Demo data
-# library(Seurat)
-# library(SeuratData)
+
 # remotes::install_github("rstudio/ggcheck")
 library(ggcheck) # for checking plot layers and geoms
 
-# withr::with_package("SeuratData", {demo_visium <- LoadData("stxBrain", type = "anterior1")})
-demo_visium <- SeuratData::LoadData("stxBrain", type = "anterior1")
-# demo_false_colours
+# Test data available through CC
+# img.url <- 'http://cf.10xgenomics.com/samples/spatial-exp/1.0.0/V1_Mouse_Brain_Sagittal_Anterior/V1_Mouse_Brain_Sagittal_Anterior_spatial.tar.gz'
+# curl::curl_download(url = img.url, destfile = basename(path = img.url))
+# untar(tarfile = basename(path = img.url))
+# move hires png to test data
+# do the same with tissue positions and scale factors
 
 # demo_newick_file
 newick_file_path <- "./testdata/demo.new"
 
+# scale factors
+scale_factor_path <- "./testdata/scalefactors_json.json"
+
 # demo clone barcode data frame
-clone_barcodes <- as.data.frame(GetTissueCoordinates(demo_visium))
+clone_barcodes <- read.csv("./testdata/tissue_positions_list.csv")
+colnames(clone_barcodes) <- c("barcode","in_tissue","array_row","array_col",
+                              "pxl_row_in_fullres", "pxl_col_in_fullres")
+clone_barcodes <- subset(clone_barcodes, in_tissue == 1)[,c("pxl_col_in_fullres","pxl_row_in_fullres","barcode")]
 colnames(clone_barcodes) <- c("x","y","Barcodes1")
+clone_barcodes <- clone_barcodes[order(clone_barcodes$x),]
 clone_barcodes$group <- c(rep("A",1000),rep("B",1000),rep("C",606), rep("D",90))
 demo_clones <- clone_barcodes[,c("Barcodes1","group")]
 colnames(demo_clones) <- c("Barcodes2","group")
@@ -41,10 +50,7 @@ clone_barcodes_scaled$new_y_scaled <- (clone_barcodes_rotate$new_y-min(clone_bar
 # ? demo newickdf?
 
 # imgae file
-# img.url <- 'http://cf.10xgenomics.com/samples/spatial-exp/1.0.0/V1_Mouse_Brain_Sagittal_Anterior/V1_Mouse_Brain_Sagittal_Anterior_spatial.tar.gz'
-# curl::curl_download(url = img.url, destfile = basename(path = img.url))
-# untar(tarfile = basename(path = img.url))
-# move hires png to test data
+
 image_file_path <- "./testdata/tissue_hires_image.png"
 
 # tissue positions file - created for mouse brain using other Visium v1 data

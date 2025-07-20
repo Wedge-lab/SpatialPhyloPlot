@@ -211,7 +211,7 @@ SpatialPhyloPlot <- function(visium_version,
 
   if(multisample){
 
-    if(suppressWarnings(!is.na(tissue_positions_left))){
+    if(exists("tissue_positions_left")){
       # get coordinates
       coords_left <- subset(tissue_positions_left, in_tissue == 1)[,c("barcode","pxl_row_in_fullres","pxl_col_in_fullres")]
       # rotate coordinates
@@ -231,7 +231,7 @@ SpatialPhyloPlot <- function(visium_version,
     }else{
       coords_left <- NA
     }
-    if(suppressWarnings(!is.na(tissue_positions_right))){
+    if(exists("tissue_positions_right")){
       # get coordinates
       coords_right <- subset(tissue_positions_right, in_tissue == 1)[,c("barcode","pxl_row_in_fullres","pxl_col_in_fullres")]
       # rotate coordinates
@@ -251,7 +251,7 @@ SpatialPhyloPlot <- function(visium_version,
     }else{
       coords_right <- NA
     }
-    if(suppressWarnings(!is.na(tissue_positions_top))){
+    if(exists("tissue_positions_top")){
       # get coordinates
       coords_top <- subset(tissue_positions_top, in_tissue == 1)[,c("barcode","pxl_row_in_fullres","pxl_col_in_fullres")]
       # rotate coordinates
@@ -271,7 +271,7 @@ SpatialPhyloPlot <- function(visium_version,
     }else{
       coords_top <- NA
     }
-    if(suppressWarnings(!is.na(tissue_positions_bottom))){
+    if(exists("tissue_positions_bottom")){
       # get coordinates
       coords_bottom <- subset(tissue_positions_bottom, in_tissue == 1)[,c("barcode","pxl_row_in_fullres","pxl_col_in_fullres")]
       # rotate coordinates
