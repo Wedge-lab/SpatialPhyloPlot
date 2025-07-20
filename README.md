@@ -4,6 +4,7 @@ An R package for plotting phylogenetic trees from Visium 10X spatial transcripto
 `SpatialPhyloPlot` is a work in progress - to follow along please watch and star this repository or check back for updates!
 
 <!-- badges: start -->
+[![codecov](https://codecov.io/gh/Wedge-lab/SpatialPhyloPlot/graph/badge.svg?token=OYOS8HNLTK)](https://codecov.io/gh/Wedge-lab/SpatialPhyloPlot)
 <!-- badges: end -->
 
 <img src="man/SpatialPhyloPlot.png" align="right" width="250" />
