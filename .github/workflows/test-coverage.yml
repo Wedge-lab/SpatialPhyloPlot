@@ -12,7 +12,7 @@ jobs:
   test-coverage:
     runs-on: ubuntu-latest
     env:
-      GITHUB_PAT: ${{ secrets.GITHUB_TOKEN }}
+      GITHUB_PAT: ${{ secrets.CODECOV_TOKEN }}
 
     steps:
       - uses: actions/checkout@v3
@@ -42,9 +42,10 @@ jobs:
           find ${{ runner.temp }}/package -name 'testthat.Rout*' -exec cat '{}' \; || true
         shell: bash
 
-      - name: Upload test results
+      - name: Upload coverage reports to Codecov
         if: failure()
-        uses: actions/upload-artifact@v3
+        uses: codecov/codecov-action@v5
         with:
           name: coverage-test-failures
           path: ${{ runner.temp }}/package
+          token: ${{ secrets.CODECOV_TOKEN }}
