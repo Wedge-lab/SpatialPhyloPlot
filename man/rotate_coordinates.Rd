@@ -7,7 +7,7 @@
 rotate_coordinates(coordinates_df)
 }
 \arguments{
-\item{coordinates_df}{A `data.frame` of spot coordinates extracted from the `Seurat` visium 10X data.}
+\item{coordinates_df}{A `data.frame` of spot coordinates extracted from the tissue positions file.}
 }
 \value{
 A `data.frame` with rotated Visium 10X spot coordinates.

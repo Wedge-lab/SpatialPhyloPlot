@@ -8,7 +8,7 @@ match_clone_barcodes(
   coordinates_df_scaled,
   clones_df,
   clone_group_name,
-  coordinate_barcode_name = "cell",
+  coordinate_barcode_name = "barcode",
   clone_barcode_name = "Barcode"
 )
 }

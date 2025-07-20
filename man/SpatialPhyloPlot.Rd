@@ -5,12 +5,12 @@
 \title{Plot spatial phylogenetic trees}
 \usage{
 SpatialPhyloPlot(
-  visium_object,
   visium_version,
   newick_file,
   image_file,
   tissue_positions_file,
   clone_df,
+  scale_factors,
   clone_group_column,
   clone_barcode_column = "Barcode",
   palette = "default",
@@ -33,10 +33,6 @@ SpatialPhyloPlot(
   multisample = FALSE,
   shared_clones = FALSE,
   plot_connections = FALSE,
-  visium_object_left = NA,
-  visium_object_right = NA,
-  visium_object_top = NA,
-  visium_object_bottom = NA,
   image_file_left = NA,
   image_file_right = NA,
   image_file_top = NA,
@@ -49,15 +45,19 @@ SpatialPhyloPlot(
   tissue_positions_file_right = NA,
   tissue_positions_file_top = NA,
   tissue_positions_file_bottom = NA,
+  scale_factors_left = NA,
+  scale_factors_right = NA,
+  scale_factors_top = NA,
+  scale_factors_bottom = NA,
   connection_width = 1,
   connection_colour = "grey",
   nestedness = 10,
+  origin_coord = NA,
+  origin_name = "diploid",
   ...
 )
 }
 \arguments{
-\item{visium_object}{A `Seurat` Visium 10X object for the tumour sample of interest.}
-
 \item{visium_version}{Which version of Visium was used. Should be either `"V1"` or `"V2"`}
 
 \item{newick_file}{A file path to the phylogenetic tree in the Newick format saved as a `.new` file.}
@@ -67,6 +67,8 @@ SpatialPhyloPlot(
 \item{tissue_positions_file}{A file path to the Visium 10X `tissue_positions_list.csv` file for V1 or `tissue_positions.csv` file for V2.}
 
 \item{clone_df}{A `data.frame` listing which barcode belongs to which clone.}
+
+\item{scale_factors}{A path to the `scalefactors_json.json` file produced by SpaceRanger.}
 
 \item{clone_group_column}{The name of the column in `clone_df` that indicates the clones.}
 
@@ -112,14 +114,6 @@ SpatialPhyloPlot(
 
 \item{plot_connections}{Whether connections should be plotted between clones that are present in multiple samples. Defaults to `FALSE`.}
 
-\item{visium_object_left}{If running in multisample mode; a `Seurat` Visium 10X object for the tissue to be plotted to the left of the main sample.}
-
-\item{visium_object_right}{If running in multisample mode; a `Seurat` Visium 10X object for the tissue to be plotted to the right of the main sample.}
-
-\item{visium_object_top}{If running in multisample mode; a `Seurat` Visium 10X object for the tissue to be plotted above the main sample.}
-
-\item{visium_object_bottom}{If running in multisample mode; a `Seurat` Visium 10X object for the tissue to be plotted below the main sample.}
-
 \item{image_file_left}{If running in multisample mode; a file path to the hires Visium 10X png image to plot to the left of the main sample.}
 
 \item{image_file_right}{If running in multisample mode; a file path to the hires Visium 10X png image to plot to the right of the main sample.}
@@ -144,11 +138,23 @@ SpatialPhyloPlot(
 
 \item{tissue_positions_file_bottom}{If running in multisample mode; a path to the Visium 10X `tissue_positions_list.csv` file for V1 or `tissue_positions.csv` file for V2, belonging to the sample plotted below the main sample.}
 
+\item{scale_factors_left}{If running in multisample mode; a path to the Visium 10X `scalefactors_json.json` file produced by SpaceRanger, belonging to the sample plotted to the left of the main sample.}
+
+\item{scale_factors_right}{If running in multisample mode; a path to the Visium 10X `scalefactors_json.json` file produced by SpaceRanger, belonging to the sample plotted to the right of the main sample.}
+
+\item{scale_factors_bottom}{If running in multisample mode; a path to the Visium 10X `scalefactors_json.json` file produced by SpaceRanger, belonging to the sample plotted below the main sample.}
+
 \item{connection_width}{The width of the connecting segment linking clones between samples. Defaults to `1`.}
 
 \item{connection_colour}{The colour of the connecting segment linking clones between samples. Defaults to `grey`.}
 
 \item{nestedness}{Roughly, how many layers of internal nodes there are in the phylogenetic tree. Defaults to `10`. Consider increasing if you notice missing connections, otherwise leave as is.}
+
+\item{origin_coord}{xy coordinates at which to plot the "origin" of the phylogenetic tree. Defaults to `NA`. Example: `c(0,1)` for top left corner.}
+
+\item{origin_name}{Name of the origin clone in the phylogenetic tree. Defaults to `"diploid"` in line with MEDICC2 output.}
+
+\item{scale_factors_topIf}{running in multisample mode; a path to the Visium 10X `scalefactors_json.json` file produced by SpaceRanger, belonging to the sample plotted on top of the main sample.}
 }
 \value{
 A ggplot2 object with the tissue, clones, and phylogenetic trees plotted together.

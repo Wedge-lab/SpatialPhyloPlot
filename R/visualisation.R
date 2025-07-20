@@ -20,7 +20,7 @@ img_get_raster <- function(image_path) {
 
 #' Crop raster image
 #'
-#' @param hires_scale High resolution scale factor extracted from Seurat object.
+#' @param hires_scale High resolution scale factor json file.
 #' @param tissue_positions A `data.frame` with the pixel coordinates of each spot.
 #' @param raster An image magick object that is plotted as the tissue.
 #'

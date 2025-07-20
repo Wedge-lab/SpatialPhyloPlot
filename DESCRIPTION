@@ -1,7 +1,8 @@
 Package: SpatialPhyloPlot
 Type: Package
 Title: Automated Plotting of Phylogenetic Trees on Spatial Transcriptomics Data
-Version: 0.2.0
+Version: 0.3.0
+Date: 2025-07-20
 Authors@R: c(
     person(
       "Maria", "Jakobsdottir",
@@ -16,7 +17,6 @@ LazyData: true
 URL: https://github.com/Wedge-lab/SpatialPhyloPlot
 BugReports: https://github.com/Wedge-lab/SpatialPhyloPlot
 Depends:
-    Seurat (>= 4.0.0)
 Imports:
     alakazam,
     ape,
@@ -24,10 +24,9 @@ Imports:
     ggplot2,
     igraph,
     magick,
-    pals,
-    Seurat
+    rjson,
+    pals
 Suggests: 
-    testthat,
-    SeuratData
+    testthat
 Config/testthat/edition: 3
 RoxygenNote: 7.3.2

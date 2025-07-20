@@ -4,21 +4,17 @@
 #'
 #' A function for plotting spatial phylogenetic trees on Visium 10X data.
 #'
-#' @param visium_object A `Seurat` Visium 10X object for the tumour sample of interest.
 #' @param visium_version Which version of Visium was used. Should be either `"V1"` or `"V2"`
 #' @param newick_file A file path to the phylogenetic tree in the Newick format saved as a `.new` file.
 #' @param image_file A file path to the hires Visium 10X png image to plot.
 #' @param tissue_positions_file A file path to the Visium 10X `tissue_positions_list.csv` file for V1 or `tissue_positions.csv` file for V2.
 #' @param clone_df A `data.frame` listing which barcode belongs to which clone.
+#' @param scale_factors A path to the `scalefactors_json.json` file produced by SpaceRanger.
 #' @param clone_group_column The name of the column in `clone_df` that indicates the clones.
 #' @param clone_barcode_column The name of the column in `clone_df` that indicates the barcode.
 #'
 #' @inheritParams img_plot
 #'
-#' @param visium_object_left If running in multisample mode; a `Seurat` Visium 10X object for the tissue to be plotted to the left of the main sample.
-#' @param visium_object_right If running in multisample mode; a `Seurat` Visium 10X object for the tissue to be plotted to the right of the main sample.
-#' @param visium_object_top If running in multisample mode; a `Seurat` Visium 10X object for the tissue to be plotted above the main sample.
-#' @param visium_object_bottom If running in multisample mode; a `Seurat` Visium 10X object for the tissue to be plotted below the main sample.
 #' @param image_file_left If running in multisample mode; a file path to the hires Visium 10X png image to plot to the left of the main sample.
 #' @param image_file_right If running in multisample mode; a file path to the hires Visium 10X png image to plot to the right of the main sample.
 #' @param image_file_top If running in multisample mode; a file path to the hires Visium 10X png image to plot above the main sample.
@@ -31,24 +27,27 @@
 #' @param tissue_positions_file_right If running in multisample mode; a path to the Visium 10X `tissue_positions_list.csv` file for V1 or `tissue_positions.csv` file for V2, belonging to the sample plotted to the right of the main sample.
 #' @param tissue_positions_file_top If running in multisample mode; a path to the Visium 10X `tissue_positions_list.csv` file for V1 or `tissue_positions.csv` file for V2, belonging to the sample plotted above the main sample.
 #' @param tissue_positions_file_bottom If running in multisample mode; a path to the Visium 10X `tissue_positions_list.csv` file for V1 or `tissue_positions.csv` file for V2, belonging to the sample plotted below the main sample.
+#' @param scale_factors_left If running in multisample mode; a path to the Visium 10X `scalefactors_json.json` file produced by SpaceRanger, belonging to the sample plotted to the left of the main sample.
+#' @param scale_factors_right If running in multisample mode; a path to the Visium 10X `scalefactors_json.json` file produced by SpaceRanger, belonging to the sample plotted to the right of the main sample.
+#' @param scale_factors_topIf running in multisample mode; a path to the Visium 10X `scalefactors_json.json` file produced by SpaceRanger, belonging to the sample plotted on top of the main sample.
+#' @param scale_factors_bottom If running in multisample mode; a path to the Visium 10X `scalefactors_json.json` file produced by SpaceRanger, belonging to the sample plotted below the main sample.
 #' @param nestedness Roughly, how many layers of internal nodes there are in the phylogenetic tree. Defaults to `10`. Consider increasing if you notice missing connections, otherwise leave as is.
 #' @param origin_coord xy coordinates at which to plot the "origin" of the phylogenetic tree. Defaults to `NA`. Example: `c(0,1)` for top left corner.
 #' @param origin_name Name of the origin clone in the phylogenetic tree. Defaults to `"diploid"` in line with MEDICC2 output.
 #'
 #' @import ggplot2
 #' @import ggforce
-#' @import Seurat
 #'
 #' @returns A ggplot2 object with the tissue, clones, and phylogenetic trees plotted together.
 #' @export
 #'
 #' @examples
-SpatialPhyloPlot <- function(visium_object,
-                             visium_version,
+SpatialPhyloPlot <- function(visium_version,
                              newick_file,
                              image_file,
                              tissue_positions_file,
                              clone_df,
+                             scale_factors,
                              clone_group_column,
                              clone_barcode_column = "Barcode",
                              palette = "default",
@@ -72,10 +71,6 @@ SpatialPhyloPlot <- function(visium_object,
                              multisample = FALSE,
                              shared_clones = FALSE,
                              plot_connections = FALSE,
-                             visium_object_left = NA,
-                             visium_object_right = NA,
-                             visium_object_top = NA,
-                             visium_object_bottom = NA,
                              image_file_left = NA,
                              image_file_right = NA,
                              image_file_top = NA,
@@ -88,6 +83,10 @@ SpatialPhyloPlot <- function(visium_object,
                              tissue_positions_file_right = NA,
                              tissue_positions_file_top = NA,
                              tissue_positions_file_bottom = NA,
+                             scale_factors_left = NA,
+                             scale_factors_right = NA,
+                             scale_factors_top = NA,
+                             scale_factors_bottom = NA,
                              connection_width = 1,
                              connection_colour = "grey",
                              nestedness = 10,
@@ -95,9 +94,6 @@ SpatialPhyloPlot <- function(visium_object,
                              origin_name = "diploid",
                              ...) {
   ############# Check inputs
-  if(all(!("Seurat" %in% class(visium_object)))){
-    stop("visium_object input must be of class 'Seurat'")
-  }
   if(!(clone_group_column %in% colnames(clone_df))){
     stop("clone_group_column must refer to a column present in clone_df.")
   }
@@ -105,9 +101,6 @@ SpatialPhyloPlot <- function(visium_object,
     stop("clone_df must be an object of class 'data.frame'.")
   }
   if(multisample){
-    if(all(suppressWarnings(is.na(c(visium_object_left, visium_object_right, visium_object_top, visium_object_bottom))))){
-      stop("Must provide at least one of 'c(visium_object_left, visium_object_right, visium_object_top, visium_object_bottom)' if running in multisample mode.")
-    }
     if(all(is.na(c(image_file_left, image_file_right, image_file_top, image_file_bottom)))){
       stop("Must provide at least one of 'c(image_file_left, image_file_right, image_file_top, image_file_bottom)' if running in multisample mode.")
     }
@@ -121,8 +114,7 @@ SpatialPhyloPlot <- function(visium_object,
     }
   }
   if(!multisample){
-    if(any(suppressWarnings(!is.na(c(visium_object_left, visium_object_right, visium_object_top, visium_object_bottom,
-                                     image_file_left, image_file_right, image_file_top, image_file_bottom,
+    if(any(suppressWarnings(!is.na(c(image_file_left, image_file_right, image_file_top, image_file_bottom,
                                      clone_df_left, clone_df_right, clone_df_top, clone_df_bottom))))){
       stop("Must run 'multisample = TRUE' if providing more than one sample. ")
     }
@@ -181,25 +173,31 @@ SpatialPhyloPlot <- function(visium_object,
   }
 
   # get scale factor
-  hires_scale <- visium_object@images[[1]]@scale.factors$hires
+  hires_scale <- rjson::fromJSON(file = scale_factors)
+  hires_scale <- hires_scale$tissue_hires_scalef
 
   if(multisample){
-    if(!is.na(image_file_left)){
-      hires_scale_left <- visium_object_left@images[[1]]@scale.factors$hires
+    if(!is.na(scale_factors_left)){
+      hires_scale_left <- rjson::fromJSON(file = scale_factors_left)
+      hires_scale_left <- hires_scale_left$tissue_hires_scalef
     }
-    if(!is.na(image_file_right)){
-      hires_scale_right <- visium_object_right@images[[1]]@scale.factors$hires
+    if(!is.na(scale_factors_right)){
+      hires_scale_right <- rjson::fromJSON(file = scale_factors_right)
+      hires_scale_right <- hires_scale_right$tissue_hires_scalef
     }
-    if(!is.na(image_file_top)){
-      hires_scale_top <- visium_object_top@images[[1]]@scale.factors$hires
+    if(!is.na(scale_factors_top)){
+      hires_scale_top <- rjson::fromJSON(file = scale_factors_top)
+      hires_scale_top <- hires_scale_top$tissue_hires_scalef
     }
-    if(!is.na(image_file_bottom)){
-      hires_scale_bottom <- visium_object_bottom@images[[1]]@scale.factors$hires
+    if(!is.na(scale_factors_bottom)){
+      hires_scale_bottom <- rjson::fromJSON(file = scale_factors_bottom)
+      hires_scale_bottom <- hires_scale_bottom$tissue_hires_scalef
     }
   }
 
   # get coordinates
-  coords <- as.data.frame(Seurat::GetTissueCoordinates(visium_object))
+  coords <- subset(tissue_positions, in_tissue == 1)[,c("barcode","pxl_row_in_fullres","pxl_col_in_fullres")]
+
   # rotate coordinates
   coords <- rotate_coordinates(coords)
   # scale coordinates
@@ -208,14 +206,14 @@ SpatialPhyloPlot <- function(visium_object,
   coords <- match_clone_barcodes(coordinates_df_scaled = coords,
                                  clones_df = clone_df,
                                  clone_group_name = clone_group_column,
-                                 coordinate_barcode_name = "cell",
+                                 coordinate_barcode_name = "barcode",
                                  clone_barcode_name = clone_barcode_column)
 
   if(multisample){
 
-    if(suppressWarnings(!is.na(visium_object_left))){
+    if(exists("tissue_positions_left")){
       # get coordinates
-      coords_left <- as.data.frame(Seurat::GetTissueCoordinates(visium_object_left))
+      coords_left <- subset(tissue_positions_left, in_tissue == 1)[,c("barcode","pxl_row_in_fullres","pxl_col_in_fullres")]
       # rotate coordinates
       coords_left <- rotate_coordinates(coords_left)
       # scale coordinates
@@ -228,14 +226,14 @@ SpatialPhyloPlot <- function(visium_object,
       coords_left <- match_clone_barcodes(coordinates_df_scaled = coords_left,
                                           clones_df = clone_df_left,
                                           clone_group_name = clone_group_column,
-                                          coordinate_barcode_name = "cell",
+                                          coordinate_barcode_name = "barcode",
                                           clone_barcode_name = clone_barcode_column)
     }else{
       coords_left <- NA
     }
-    if(suppressWarnings(!is.na(visium_object_right))){
+    if(exists("tissue_positions_right")){
       # get coordinates
-      coords_right <- as.data.frame(Seurat::GetTissueCoordinates(visium_object_right))
+      coords_right <- subset(tissue_positions_right, in_tissue == 1)[,c("barcode","pxl_row_in_fullres","pxl_col_in_fullres")]
       # rotate coordinates
       coords_right <- rotate_coordinates(coords_right)
       # scale coordinates
@@ -248,14 +246,14 @@ SpatialPhyloPlot <- function(visium_object,
       coords_right <- match_clone_barcodes(coordinates_df_scaled = coords_right,
                                            clones_df = clone_df_right,
                                            clone_group_name = clone_group_column,
-                                           coordinate_barcode_name = "cell",
+                                           coordinate_barcode_name = "barcode",
                                            clone_barcode_name = clone_barcode_column)
     }else{
       coords_right <- NA
     }
-    if(suppressWarnings(!is.na(visium_object_top))){
+    if(exists("tissue_positions_top")){
       # get coordinates
-      coords_top <- as.data.frame(Seurat::GetTissueCoordinates(visium_object_top))
+      coords_top <- subset(tissue_positions_top, in_tissue == 1)[,c("barcode","pxl_row_in_fullres","pxl_col_in_fullres")]
       # rotate coordinates
       coords_top <- rotate_coordinates(coords_top)
       # scale coordinates
@@ -268,14 +266,14 @@ SpatialPhyloPlot <- function(visium_object,
       coords_top <- match_clone_barcodes(coordinates_df_scaled = coords_top,
                                          clones_df = clone_df_top,
                                          clone_group_name = clone_group_column,
-                                         coordinate_barcode_name = "cell",
+                                         coordinate_barcode_name = "barcode",
                                          clone_barcode_name = clone_barcode_column)
     }else{
       coords_top <- NA
     }
-    if(suppressWarnings(!is.na(visium_object_bottom))){
+    if(exists("tissue_positions_bottom")){
       # get coordinates
-      coords_bottom <- as.data.frame(Seurat::GetTissueCoordinates(visium_object_bottom))
+      coords_bottom <- subset(tissue_positions_bottom, in_tissue == 1)[,c("barcode","pxl_row_in_fullres","pxl_col_in_fullres")]
       # rotate coordinates
       coords_bottom <- rotate_coordinates(coords_bottom)
       # scale coordinates
@@ -288,7 +286,7 @@ SpatialPhyloPlot <- function(visium_object,
       coords_bottom <- match_clone_barcodes(coordinates_df_scaled = coords_bottom,
                                             clones_df = clone_df_bottom,
                                             clone_group_name = clone_group_column,
-                                            coordinate_barcode_name = "cell",
+                                            coordinate_barcode_name = "barcode",
                                             clone_barcode_name = clone_barcode_column)
     }else{
       coords_bottom <- NA
