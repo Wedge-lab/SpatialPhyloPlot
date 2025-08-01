@@ -16,7 +16,6 @@ Encoding: UTF-8
 LazyData: true
 URL: https://github.com/Wedge-lab/SpatialPhyloPlot
 BugReports: https://github.com/Wedge-lab/SpatialPhyloPlot
-Depends:
 Imports:
     alakazam,
     ape,
@@ -27,6 +26,9 @@ Imports:
     rjson,
     pals
 Suggests: 
+    knitr,
+    rmarkdown,
     testthat
 Config/testthat/edition: 3
 RoxygenNote: 7.3.2
+VignetteBuilder: knitr
