@@ -47,8 +47,6 @@ This allows direct visualisation of the spread of clones through a tissue and th
 
 # Functionality
 
-## Implementation
-
 `SpatialPhyloPlot` is available to download and install through github at \url{https://github.com/Wedge-lab/SpatialPhyloPlot}.
 The latest package release, or specific branches under development, can be installed from github, along with any dependencies, using the `devtools` `R` package [@wickham2022devtools]:
 
