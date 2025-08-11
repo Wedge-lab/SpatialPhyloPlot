@@ -10,12 +10,13 @@ An R package for plotting phylogenetic trees from Visium 10X spatial transcripto
 <img src="man/SpatialPhyloPlot.png" align="right" width="250" />
 
 - [SpatialPhyloPlot](#spatialphyloplot)
-  - [Citation](#citation)
   - [Introduction](#introduction)
+  - [Citation](#citation)
   - [Installation](#installation)
   - [Example](#example)
     - [Static single sample](#static-single-sample)
     - [Static multi-sample](#static-multi-sample)
+    - [More detailed examples](#more-detailed-examples)
   - [Future Developments](#future-developments)
 
 ## Introduction
@@ -139,6 +140,9 @@ SpatialPhyloPlot(visium_version = "V2",
 ```
 
 <img src="man/example_double_sample_one_tree.png" align="center" width="1000" />
+
+### More detailed examples
+For more detailed examples that explore different features and customisations that can be achieved through `SpatialPhyloPlot` please see our [vignette that explores different plotting options](https://github.com/Wedge-lab/SpatialPhyloPlot/blob/main/vignettes/exploring_plotting_options_in_SpatialPhyloPlot.html). 
 
 ## Future Developments
 If you have an idea for a feature that you would like to see implemented in this package please submit a [GitHub issue](https://github.com/Wedge-lab/SpatialPhyloPlot/issues) and we'll see what we can do! :)
