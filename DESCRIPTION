@@ -14,7 +14,7 @@ Description: An R package to plot phylogenetic trees generated from 10X Visium s
 License: GPL (>= 3)
 Encoding: UTF-8
 LazyData: true
-URL: https://github.com/Wedge-lab/SpatialPhyloPlot
+URL: https://github.com/Wedge-lab/SpatialPhyloPlot, https://wedge-lab.github.io/SpatialPhyloPlot/
 BugReports: https://github.com/Wedge-lab/SpatialPhyloPlot
 Imports:
     alakazam,
