@@ -17,6 +17,8 @@ SpatialPhyloPlot(
   plot_points = TRUE,
   plot_polygon = FALSE,
   point_alpha = 0.8,
+  point_size = 1.5,
+  point_shape = 19,
   hull_alpha = 0,
   hull_expansion = 0.005,
   centroid_alpha = 0.9,
@@ -81,6 +83,10 @@ SpatialPhyloPlot(
 \item{plot_polygon}{Whether a polygon should be plotted for each clone. Defaults to `FALSE`.}
 
 \item{point_alpha}{The alpha transparency value for points, default is `0.8`.}
+
+\item{point_size}{The size of the Visium spot points, default is `1.5`.}
+
+\item{point_shape}{The shape to use for the Visium spot points, default is `19`.}
 
 \item{hull_alpha}{The alpha transparency value for polygons/hulls to be plotted, default is `0` (not plotted).}
 

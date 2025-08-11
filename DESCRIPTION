@@ -1,7 +1,7 @@
 Package: SpatialPhyloPlot
 Type: Package
 Title: Automated Plotting of Phylogenetic Trees on Spatial Transcriptomics Data
-Version: 0.3.0
+Version: 0.4.0
 Date: 2025-07-20
 Authors@R: c(
     person(
@@ -16,7 +16,6 @@ Encoding: UTF-8
 LazyData: true
 URL: https://github.com/Wedge-lab/SpatialPhyloPlot
 BugReports: https://github.com/Wedge-lab/SpatialPhyloPlot
-Depends:
 Imports:
     alakazam,
     ape,
@@ -27,6 +26,9 @@ Imports:
     rjson,
     pals
 Suggests: 
+    knitr,
+    rmarkdown,
     testthat
 Config/testthat/edition: 3
 RoxygenNote: 7.3.2
+VignetteBuilder: knitr
