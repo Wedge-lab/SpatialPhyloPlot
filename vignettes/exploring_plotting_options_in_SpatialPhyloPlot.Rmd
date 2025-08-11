@@ -20,6 +20,8 @@ knitr::opts_chunk$set(
 # Introduction
 The purpose of this vignette is to show users how to plot an customise the plotting of phylogenetic trees on top of Visium spatial transcriptomics data. 
 
+Please note, the trees produced by `SpatialPhyloPlot` are intended to show the spatial relationship between clones. Thus, the length of the segments in the tree **does not** represent genetic distance. 
+
 # Installation
 
 ```{r eval=FALSE, echo=TRUE}
@@ -194,6 +196,31 @@ SpatialPhyloPlot(visium_version = "V2",
 ```
 
 ## Modifying appearance of points
+
+The appearance of the points representing Visium spots can be modified using the `point_size` and `point_shape` parameters. 
+
+```{r}
+SpatialPhyloPlot(visium_version = "V2",
+                 newick_file = newick_file,
+                 image_file = image_file,
+                 scale_factors = scale_factors_file,
+                 tissue_positions_file = tissue_positions_file, 
+                 clone_df = clone_df,
+                 clone_group_column = "group",
+                 point_size = 1)
+```
+
+
+```{r}
+SpatialPhyloPlot(visium_version = "V2",
+                 newick_file = newick_file,
+                 image_file = image_file,
+                 scale_factors = scale_factors_file,
+                 tissue_positions_file = tissue_positions_file, 
+                 clone_df = clone_df,
+                 clone_group_column = "group",
+                 point_shape = 18)
+```
 
 ## Modifying colours
 ### Point, node, and polygon colours
