@@ -69,6 +69,8 @@ img_name_colours <- function(newick_df) {
 #' @param newick_df The newick `data.frame` generated from the .new phylogenetic tree file.
 #' @param from_to_df A `data.frame` containing the start and end coordinates of each branch on the phylogenetic tree.
 #' @param point_alpha The alpha transparency value for points, default is `0.8`.
+#' @param point_size The size of the Visium spot points, default is `1.5`.
+#' @param point_shape The shape to use for the Visium spot points, default is `19`.
 #' @param hull_alpha The alpha transparency value for polygons/hulls to be plotted, default is `0` (not plotted).
 #' @param hull_expansion The hull/polygon extension amount, default is `0.005`.
 #' @param centroid_alpha The alpha transparency value for the centroids plotted as part of the phylogenetic tree, default is `0.9`.
@@ -136,6 +138,8 @@ img_plot <- function(raster_img,
                      plot_points = TRUE,
                      plot_polygon = FALSE,
                      point_alpha = 0.8,
+                     point_size = 1.5,
+                     point_shape = 19,
                      hull_alpha = 0,
                      hull_expansion = 0.005,
                      centroid_alpha = 0.9,
@@ -203,28 +207,28 @@ img_plot <- function(raster_img,
   if(plot_points){
     p <- p +
       geom_point(data = coordinates_df_scaled, aes(x = new_x_scaled, y = new_y_scaled, colour = Clone),
-                 alpha = point_alpha, show.legend = NA)
+                 alpha = point_alpha, show.legend = NA, size = point_size, shape = point_shape)
     # plotting multisample points
     if(multisample & shared_clones){
       if(!all(is.na(coordinates_df_scaled_left))){
         p <- p +
           geom_point(data = coordinates_df_scaled_left, aes(x = new_x_scaled, y = new_y_scaled, colour = Clone),
-                     alpha = point_alpha, show.legend = NA)
+                     alpha = point_alpha, show.legend = NA, size = point_size, shape = point_shape)
       }
       if(!all(is.na(coordinates_df_scaled_right))){
         p <- p +
           geom_point(data = coordinates_df_scaled_right, aes(x = new_x_scaled, y = new_y_scaled, colour = Clone),
-                     alpha = point_alpha, show.legend = NA)
+                     alpha = point_alpha, show.legend = NA, size = point_size, shape = point_shape)
       }
       if(!all(is.na(coordinates_df_scaled_top))){
         p <- p +
           geom_point(data = coordinates_df_scaled_top, aes(x = new_x_scaled, y = new_y_scaled, colour = Clone),
-                     alpha = point_alpha, show.legend = NA)
+                     alpha = point_alpha, show.legend = NA, size = point_size, shape = point_shape)
       }
       if(!all(is.na(coordinates_df_scaled_bottom))){
         p <- p +
           geom_point(data = coordinates_df_scaled_bottom, aes(x = new_x_scaled, y = new_y_scaled, colour = Clone),
-                     alpha = point_alpha, show.legend = NA)
+                     alpha = point_alpha, show.legend = NA, size = point_size, shape = point_shape)
       }
     }
   }
