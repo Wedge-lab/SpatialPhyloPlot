@@ -319,28 +319,28 @@ img_plot <- function(raster_img,
   if(plot_internal_nodes){
     p <- p +
       geom_point(data = subset(newick_df, is.na(colour)), aes(x = centroid_x, y = centroid_y, colour = "Internal Node", fill = internal_node_colour),
-                 size = internal_node_size, alpha = internal_node_alpha, show.legend = NA, shape = 21, colour = internal_node_colour)
+                 size = internal_node_size, alpha = internal_node_alpha, show.legend = NA, shape = 21, fill = internal_node_colour)
 
     if(multisample & shared_clones){
       if(!all(is.na(newick_df_left))){
         p <- p +
           geom_point(data = subset(newick_df_left, is.na(colour)), aes(x = centroid_x, y = centroid_y, colour = "Internal Node", fill = internal_node_colour),
-                     size = internal_node_size, alpha = internal_node_alpha, show.legend = NA, shape = 21, colour = internal_node_colour)
+                     size = internal_node_size, alpha = internal_node_alpha, show.legend = NA, shape = 21, fill = internal_node_colour)
       }
       if(!all(is.na(newick_df_right))){
         p <- p +
           geom_point(data = subset(newick_df_right, is.na(colour)), aes(x = centroid_x, y = centroid_y, colour = "Internal Node", fill = internal_node_colour),
-                     size = internal_node_size, alpha = internal_node_alpha, show.legend = NA, shape = 21, colour = internal_node_colour)
+                     size = internal_node_size, alpha = internal_node_alpha, show.legend = NA, shape = 21, fill = internal_node_colour)
       }
       if(!all(is.na(newick_df_top))){
         p <- p +
           geom_point(data = subset(newick_df_top, is.na(colour)), aes(x = centroid_x, y = centroid_y, colour = "Internal Node", fill = internal_node_colour),
-                     size = internal_node_size, alpha = internal_node_alpha, show.legend = NA, shape = 21, colour = internal_node_colour)
+                     size = internal_node_size, alpha = internal_node_alpha, show.legend = NA, shape = 21, fill = internal_node_colour)
       }
       if(!all(is.na(newick_df_bottom))){
         p <- p +
           geom_point(data = subset(newick_df_bottom, is.na(colour)), aes(x = centroid_x, y = centroid_y, colour = "Internal Node", fill = internal_node_colour),
-                     size = internal_node_size, alpha = internal_node_alpha, show.legend = NA, shape = 21, colour = internal_node_colour)
+                     size = internal_node_size, alpha = internal_node_alpha, show.legend = NA, shape = 21, fill = internal_node_colour)
       }
     }
   }
