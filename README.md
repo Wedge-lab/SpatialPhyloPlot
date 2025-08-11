@@ -7,7 +7,7 @@ An R package for plotting phylogenetic trees from Visium 10X spatial transcripto
 [![codecov](https://codecov.io/gh/Wedge-lab/SpatialPhyloPlot/graph/badge.svg?token=OYOS8HNLTK)](https://codecov.io/gh/Wedge-lab/SpatialPhyloPlot)
 <!-- badges: end -->
 
-<img src="man/SpatialPhyloPlot.png" align="right" width="250" />
+<img src="https://github.com/Wedge-lab/SpatialPhyloPlot/blob/main/man/SpatialPhyloPlot.png?raw=true" align="right" width="250" />
 
 - [SpatialPhyloPlot](#spatialphyloplot)
   - [Introduction](#introduction)
@@ -92,7 +92,7 @@ SpatialPhyloPlot(visium_version = "V2",
                  )
 ```
 
-<img src="man/example_single_sample.png" align="center" width="500" />
+<img src="https://github.com/Wedge-lab/SpatialPhyloPlot/blob/main/man/example_single_sample.png?raw=true" align="center" width="500" />
 
 
 ### Static multi-sample
@@ -117,7 +117,7 @@ SpatialPhyloPlot(visium_version = "V2",
                  point_alpha = 0.5)
 ```
 
-<img src="man/example_double_sample.png" align="center" width="1000" />
+<img src="https://github.com/Wedge-lab/SpatialPhyloPlot/blob/main/man/example_double_sample.png?raw=true" align="center" width="1000" />
 
 If you want to plot a single joint phylogenetic tree we recommend using the `plot_internal_nodes = TRUE` and `shared_clones = FALSE` options. 
 ```
@@ -139,7 +139,7 @@ SpatialPhyloPlot(visium_version = "V2",
                  point_alpha = 0.5)
 ```
 
-<img src="man/example_double_sample_one_tree.png" align="center" width="1000" />
+<img src="https://github.com/Wedge-lab/SpatialPhyloPlot/blob/main/man/example_double_sample_one_tree.png?raw=true" align="center" width="1000" />
 
 ### More detailed examples
 For more detailed examples that explore different features and customisations that can be achieved through `SpatialPhyloPlot` please see our [vignette that explores different plotting options](https://github.com/Wedge-lab/SpatialPhyloPlot/blob/main/vignettes/exploring_plotting_options_in_SpatialPhyloPlot.html). 
